@@ -57,7 +57,7 @@ export default function HeroSection() {
           </a>
 
           <a
-            href="mailto:[rolan.bacalla@gmail.com]"
+            href="mailto:rolan.bacalla@gmail.com"
             className="inline-flex items-center justify-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/5"
           >
             Get in Touch

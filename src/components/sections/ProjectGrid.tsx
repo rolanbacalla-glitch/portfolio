@@ -131,7 +131,7 @@ export default function ProjectGrid() {
               </div>
 
               <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
-                <p className="mb-3 text-xs uppercase tracking-[0.18em] font-bold text-zinc-20">
+                <p className="mb-3 text-xs uppercase tracking-[0.18em] font-bold text-zinc-400">
                   {project.category}
                 </p>
                 <div className="flex items-start justify-between gap-4">
