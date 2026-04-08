@@ -46,7 +46,7 @@ const projects: Project[] = [
     image:
       "https://images.unsplash.com/photo-1708370456263-464604531b30?q=80&w=2064&auto=format&fit=crop",
     size: "medium",
-    href: "https://travel-kin.vercel.app/",
+    href: "https://travel-kin.rolanbacalla.space/",
   },
   {
     id: 4,
@@ -57,7 +57,7 @@ const projects: Project[] = [
     image:
       "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1200&auto=format&fit=crop",
     size: "medium",
-    href: "https://lynda-plus.vercel.app/",
+    href: "https://lynda-plus.rolanbacalla.space/",
   },
   {
     id: 5,
@@ -68,7 +68,7 @@ const projects: Project[] = [
     image:
       "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1400&auto=format&fit=crop",
     size: "medium",
-    href: "https://fluxlab-ai.vercel.app/",
+    href: "https://design-system.rolanbacalla.space/",
   },
   {
     id: 6,
@@ -79,7 +79,7 @@ const projects: Project[] = [
     image:
       "https://images.unsplash.com/photo-1652533625932-25d5104161a1?q=80&w=774&auto=format&fit=crop",
     size: "medium",
-    href: "https://nest-crypto-wallet.vercel.app/",
+    href: "https://nest-wallet.rolanbacalla.space/",
   },
 
 ];
