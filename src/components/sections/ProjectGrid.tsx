@@ -81,7 +81,17 @@ const projects: Project[] = [
     size: "medium",
     href: "https://nest-wallet.rolanbacalla.space/",
   },
-
+  {
+    id: 7,
+    title: "Visual Exploration & Systems",
+    category: "UI/UX / Visual Systems",
+    description:
+      "A deep dive into functional aesthetics, spanning from user journey mapping to high-fidelity dark-mode interfaces and dashboard systems.",
+    image:
+      "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1200&auto=format&fit=crop",
+    size: "medium",
+    href: "https://photos.app.goo.gl/L84z1yFRZhecR7p99",
+  },
 ];
 
 export default function ProjectGrid() {
