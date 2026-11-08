@@ -135,6 +135,11 @@ export default function ProjectGrid() {
                   src={project.image}
                   alt={project.title}
                   fill
+                  sizes={
+                    project.size === "large"
+                      ? "(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
+                      : "(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 600px"
+                  }
                   className="object-cover transition duration-700 group-hover:scale-[1.03]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
