@@ -24,7 +24,7 @@ const projects: Project[] = [
     image:
       "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1400&auto=format&fit=crop",
     size: "medium",
-    href: "https://play.google.com/store/apps/details?id=com.audiopartnership.music.streammagic&hl=en_GB",
+    href: "#",
   },
   {
     id: 2,
@@ -35,7 +35,7 @@ const projects: Project[] = [
     image:
       "https://images.unsplash.com/photo-1615554851544-e6249b92a492?q=80&w=1740&auto=format&fit=crop",
     size: "medium",
-    href: "https://play.google.com/store/apps/details?id=com.cambridgeaudio.melomaniaplus&hl=en_GB",
+    href: "#",
   },
   {
     id: 3,
