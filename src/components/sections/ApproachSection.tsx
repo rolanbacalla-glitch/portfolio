@@ -130,7 +130,7 @@ export default function ApproachSection() {
                 Product Craft
               </p>
               <p className="mt-1 text-[12.5px] text-white/75">
-                Wireframes · Prototypes · London
+                Wireframes · Prototypes
               </p>
             </div>
           </div>
