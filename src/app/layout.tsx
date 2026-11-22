@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-GB"
-      className={`${dmSans.variable} ${plusJakartaSans.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${plusJakartaSans.variable} antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-[#EAECEF] text-[#10161C] font-sans">

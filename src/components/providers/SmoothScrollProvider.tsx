@@ -1,36 +1,43 @@
 "use client";
 
 import { ReactNode, useEffect } from "react";
-import Lenis from "@studio-freight/lenis";
 
-export default function SmoothScrollProvider({ children }: { children: ReactNode }) {
-
-
+/**
+ * Preserves 100% native browser scrolling for mouse wheel, middle-mouse
+ * autoscroll, trackpads, and touch while smoothly animating in-page anchor links.
+ */
+export default function SmoothScrollProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReducedMotion) return;
+    const handleAnchorClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      const anchor = target?.closest<HTMLAnchorElement>('a[href^="#"]');
+      if (!anchor) return;
 
-    const scroll = new Lenis({
-      duration: 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      touchMultiplier: 2,
-    });
+      const hash = anchor.getAttribute("href");
+      if (!hash || hash === "#") return;
 
-    let rafId = 0;
-    function raf(time: number) {
-      scroll.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
+      const destination = document.querySelector<HTMLElement>(hash);
+      if (!destination) return;
 
-    rafId = requestAnimationFrame(raf);
+      event.preventDefault();
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
 
-    return () => {
-      cancelAnimationFrame(rafId);
-      scroll.destroy();
+      destination.scrollIntoView({
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+        block: "start",
+      });
+
+      window.history.pushState(null, "", hash);
     };
+
+    document.addEventListener("click", handleAnchorClick);
+    return () => document.removeEventListener("click", handleAnchorClick);
   }, []);
 
   return <>{children}</>;
