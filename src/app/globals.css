@@ -1,33 +1,34 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui;
-  --font-heading: var(--font-heading), sans-serif;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 
-  --color-background: oklch(14.9% 0 0);
-  --color-foreground: oklch(98% 0 0);
-
-  --color-cta: oklch(70% 0.3 190);
-  /* Electric Cyan */
-  --color-secondary: oklch(63.9% 0 0);
-  --color-border: oklch(25% 0 0);
+  --color-canvas: #eaecef;
+  --color-sheet-light: #faf8f5;
+  --color-sheet-dark: #0f131a;
+  --color-surface-dark: #191e28;
+  --color-ink: #10161c;
+  --color-muted: #6b7280;
+  --color-accent: #2ca884;
+  --color-lavender: #c8bfff;
 }
 
 @layer base {
-
-  *,
-  ::after,
-  ::before {
-    border-color: var(--color-border);
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
   }
 
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
     font-family: var(--font-sans);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
-    @apply selection:bg-cta/30 selection:text-cta;
+    -moz-osx-font-smoothing: grayscale;
+    @apply selection:bg-[#2CA884]/20 selection:text-[#10161C];
   }
 
   h1,
@@ -37,44 +38,24 @@
   h5,
   h6 {
     font-family: var(--font-heading);
-    letter-spacing: -0.015em;
-    font-weight: 700;
+    text-wrap: balance;
   }
 }
 
-@layer utilities {
-  .bg-noise {
-    position: relative;
-  }
-
-  .bg-noise::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    opacity: 0.04;
-    z-index: 9999;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  }
-}
-
-/* Custom Scrollbar */
+/* Refined minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-background);
+  background: #eaecef;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-secondary);
-  border-radius: 5px;
+  background: #c5cbd3;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-foreground);
+  background: #9aa2ae;
 }

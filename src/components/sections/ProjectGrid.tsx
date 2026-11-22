@@ -1,172 +1,299 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Compass,
+  Headphones,
+  Layers,
+  LineChart,
+  Radio,
+  ShieldCheck,
+  X,
+} from "lucide-react";
+import { caseStudies, type CaseStudy } from "@/data/portfolio";
 
-interface Project {
-  id: number;
-  title: string;
-  category: string;
-  description: string;
-  image: string;
-  size: "small" | "medium" | "large";
-  href?: string;
+function ProjectIcon({ type }: { type: CaseStudy["icon"] }) {
+  switch (type) {
+    case "audio":
+      return <Radio className="h-[22px] w-[22px]" strokeWidth={1.7} />;
+    case "headphones":
+      return <Headphones className="h-[22px] w-[22px]" strokeWidth={1.7} />;
+    case "compass":
+      return <Compass className="h-[22px] w-[22px]" strokeWidth={1.7} />;
+    case "research":
+      return <LineChart className="h-[22px] w-[22px]" strokeWidth={1.7} />;
+    case "layers":
+      return <Layers className="h-[22px] w-[22px]" strokeWidth={1.7} />;
+    case "shield":
+      return <ShieldCheck className="h-[22px] w-[22px]" strokeWidth={1.7} />;
+  }
 }
 
-const projects: Project[] = [
-  {
-    id: 1,
-    title: "StreamMagic",
-    category: "Connected Audio / App UX",
-    description:
-      "Redesigned key listening and control flows for a hi-fi streaming companion app, improving clarity, navigation, and day-to-day usability across complex product interactions.",
-    image:
-      "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1400&auto=format&fit=crop",
-    size: "medium",
-    href: "#",
-  },
-  {
-    id: 2,
-    title: "Melomania Connect",
-    category: "Mobile App / Consumer Audio",
-    description:
-      "Designed app experiences for wireless earbuds management, including ANC, transparency mode, EQ, and touch controls with a focus on intuitive settings architecture.",
-    image:
-      "https://images.unsplash.com/photo-1615554851544-e6249b92a492?q=80&w=1740&auto=format&fit=crop",
-    size: "medium",
-    href: "#",
-  },
-  {
-    id: 3,
-    title: "Travel Kin",
-    category: "Concept Product / Travel",
-    description:
-      "Explored a travel companion product that helps users organise trips, navigate plans, and manage information through clearer UX structure and supportive design patterns.",
-    image:
-      "https://images.unsplash.com/photo-1708370456263-464604531b30?q=80&w=2064&auto=format&fit=crop",
-    size: "medium",
-    href: "https://travel-kin.rolanbacalla.space/",
-  },
-  {
-    id: 4,
-    title: "Lynda Plus",
-    category: "Research / Evaluation",
-    description:
-      "A high-end, AI-powered user research platform designed to deliver deep, actionable insights with unprecedented speed. ",
-    image:
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1200&auto=format&fit=crop",
-    size: "medium",
-    href: "https://lynda-plus.rolanbacalla.space/",
-  },
-  {
-    id: 5,
-    title: "Design Systems Work",
-    category: "Systems / UI Foundations",
-    description:
-      "Created scalable UI structures, reusable components, and clearer design patterns to support consistency across screens, workflows, and developer handoff.",
-    image:
-      "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1400&auto=format&fit=crop",
-    size: "medium",
-    href: "https://design-system.rolanbacalla.space/",
-  },
-  {
-    id: 6,
-    title: "Nest Wallet",
-    category: "Crypto Wallet / Trading",
-    description:
-      "An AI layer inside a crypto wallet that explains transactions, detects risk, and helps users avoid scams and irreversible mistakes.  ",
-    image:
-      "https://images.unsplash.com/photo-1652533625932-25d5104161a1?q=80&w=774&auto=format&fit=crop",
-    size: "medium",
-    href: "https://nest-wallet.rolanbacalla.space/",
-  },
-  {
-    id: 7,
-    title: "Visual Exploration & Systems",
-    category: "UI/UX / Visual Systems",
-    description:
-      "A deep dive into functional aesthetics, spanning from user journey mapping to high-fidelity dark-mode interfaces and dashboard systems.",
-    image:
-      "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1200&auto=format&fit=crop",
-    size: "medium",
-    href: "https://photos.app.goo.gl/L84z1yFRZhecR7p99",
-  },
-];
-
 export default function ProjectGrid() {
+  const [selectedProject, setSelectedProject] = useState<CaseStudy | null>(null);
+
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSelectedProject(null);
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedProject]);
+
   return (
-    <section id="projects" className="mx-auto max-w-7xl px-6 py-24 md:px-10">
-      <div className="mb-14 max-w-3xl">
-        <p className="mb-4 text-sm uppercase tracking-[0.22em] text-zinc-400">
-          Selected Projects
-        </p>
-        <h2 className="max-w-6xl text-5xl font-bold leading-[1.2em] tracking-[0.0em] text-white md:text-7xl lg:text-[4rem]">
-          Case studies grounded in real product challenges
+    <section
+      id="work"
+      className="relative overflow-hidden rounded-[28px] bg-[#FAF8F5] px-6 py-10 text-[#10161C] shadow-[0_1px_3px_rgba(16,22,28,0.04)] sm:px-10 sm:py-12 lg:rounded-[36px] lg:px-14 lg:py-14"
+    >
+      {/* Header Row */}
+      <div className="mb-10 max-w-2xl lg:mb-12">
+        <div className="inline-flex items-center gap-3">
+          <span className="inline-flex h-7 min-w-[38px] items-center justify-center rounded-full bg-[#10161C] px-3 text-[11px] font-semibold tracking-wide text-white tabular-nums">
+            03
+          </span>
+          <span className="text-[14px] font-semibold tracking-[-0.01em] text-[#10161C]">
+            Selected Case Studies
+          </span>
+        </div>
+
+        <h2 className="mt-6 font-heading text-[2.5rem] font-extrabold leading-[1.02] tracking-[-0.035em] text-[#10161C] sm:text-[3.25rem]">
+          Case studies grounded in{" "}
+          <span className="text-[#2CA884]">real product challenges.</span>
         </h2>
-        <p className="mt-5 text-base leading-7 text-zinc-300 md:text-lg">
+
+        <p className="mt-4 max-w-xl text-[15px] leading-[1.6] text-[#6B7280]">
           A selection of product design work spanning connected audio, companion
-          apps, UX audits, and concept development. Each project focuses on
-          solving a specific user or business problem with clear design thinking.
+          apps, UX research, and design systems — each focused on clear
+          usability and thoughtful execution.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-        {projects.map((project, i) => {
-          const spanClass =
-            project.size === "large"
-              ? "md:col-span-7 md:row-span-2"
-              : project.size === "medium"
-                ? "md:col-span-5"
-                : "md:col-span-4";
+      {/* Portfolio Work Cards — Converted to the New Vertical Full-Bleed Card Design */}
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        {caseStudies.map((project) => (
+          <article
+            key={project.id}
+            className="group relative flex min-h-[450px] flex-col justify-between overflow-hidden rounded-[26px] bg-[#0B0F14] p-6 text-left transition-transform duration-300 hover:-translate-y-1 lg:min-h-[500px] lg:rounded-[28px] lg:p-7"
+          >
+            {/* Full-Bleed Artwork */}
+            <Image
+              src={project.image}
+              alt={project.imageAlt}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+              referrerPolicy="no-referrer"
+            />
 
-          return (
-            <motion.a
-              key={project.id}
-              href={project.href || "#"}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: i * 0.06 }}
-              className={`group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] ${spanClass}`}
-            >
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  sizes={
-                    project.size === "large"
-                      ? "(max-width: 768px) 100vw, (max-width: 1200px) 60vw, 800px"
-                      : "(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 600px"
-                  }
-                  className="object-cover transition duration-700 group-hover:scale-[1.03]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+            {/* Signature Deep Seamless Bottom Scrim (matching the 3 hero cards) */}
+            <div
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#05080B] via-[#05080B]/75 via-42% to-transparent"
+              aria-hidden="true"
+            />
+
+            {/* Stretched Click Area to Open Case Study Overview */}
+            <button
+              type="button"
+              onClick={() => setSelectedProject(project)}
+              aria-label={`View ${project.title} case study`}
+              className="absolute inset-0 z-10 rounded-[26px] focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#2CA884] lg:rounded-[28px] cursor-pointer"
+            />
+
+            {/* Top Row: Signature Dark Circular Icon Badge + External Arrow */}
+            <div className="relative z-20 flex items-center justify-between pointer-events-none">
+              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#10161C]/95 text-white shadow-sm transition-transform duration-200 group-hover:scale-105">
+                <ProjectIcon type={project.icon} />
+              </span>
+
+              {project.liveUrl ? (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${project.liveLabel ?? "Open live project"} for ${project.title}`}
+                  className="pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#10161C]/75 text-white/90 backdrop-blur-sm transition-colors duration-200 group-hover:border-white group-hover:bg-white group-hover:text-[#10161C] hover:border-white hover:bg-white hover:text-[#10161C] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884]"
+                >
+                  <ArrowUpRight className="h-4 w-4" />
+                </a>
+              ) : (
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#10161C]/75 text-white/90 backdrop-blur-sm transition-colors duration-200 group-hover:border-white group-hover:bg-white group-hover:text-[#10161C]">
+                  <ArrowUpRight className="h-4 w-4" />
+                </span>
+              )}
+            </div>
+
+            {/* Bottom Content matching the Drafted Card Typography & Rhythm */}
+            <div className="relative z-20 mt-auto pt-28 pointer-events-none">
+              <p className="text-[12px] font-medium text-white/65 tabular-nums">
+                {project.domain} · {project.year}
+              </p>
+
+              <h3 className="mt-1.5 font-heading text-[26px] font-semibold leading-[1.12] tracking-[-0.02em] text-white">
+                {project.title}
+              </h3>
+
+              <p className="mt-2.5 text-[14px] leading-[1.5] text-white/80">
+                {project.summary}
+              </p>
+
+              <div className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#54D6AE] transition-colors group-hover:text-white">
+                <span>View case study</span>
+                <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" />
               </div>
+            </div>
+          </article>
+        ))}
+      </div>
 
-              <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
-                <p className="mb-3 text-xs uppercase tracking-[0.18em] font-bold text-zinc-400">
-                  {project.category}
-                </p>
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-2xl font-semibold text-white">
-                      {project.title}
-                    </h3>
-                    <p className="mt-3 max-w-xl text-sm leading-6 text-zinc-300">
-                      {project.description}
-                    </p>
-                  </div>
-                  <span className="mt-1 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white">
-                    <ArrowUpRight size={16} />
-                  </span>
+      {/* Case Study Detail Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#0F131A]/75 p-4 backdrop-blur-sm sm:p-6"
+            onClick={() => setSelectedProject(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="case-study-modal-title"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 18, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 12, scale: 0.98 }}
+              transition={{ duration: 0.22 }}
+              onClick={(event) => event.stopPropagation()}
+              className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[28px] bg-[#FAF8F5] text-[#10161C] shadow-2xl"
+            >
+              {/* Top Media Header */}
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#10161C]">
+                <Image
+                  src={selectedProject.image}
+                  alt={selectedProject.imageAlt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 768px"
+                  className="object-cover"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0F131A]/80 via-[#0F131A]/20 to-transparent" />
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedProject(null)}
+                  aria-label="Close case study overview"
+                  className="absolute top-4 right-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#0F131A]/85 text-white transition-colors hover:bg-[#0F131A] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white cursor-pointer"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+
+                <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+                  <p className="text-[12.5px] font-medium text-white/80 tabular-nums">
+                    {selectedProject.domain} · {selectedProject.year}
+                  </p>
+                  <h3
+                    id="case-study-modal-title"
+                    className="mt-1 font-heading text-3xl font-bold tracking-[-0.025em] text-white sm:text-4xl"
+                  >
+                    {selectedProject.title}
+                  </h3>
                 </div>
               </div>
-            </motion.a>
-          );
-        })}
-      </div>
+
+              {/* Modal Body */}
+              <div className="space-y-6 p-6 sm:p-8">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <div>
+                    <h4 className="text-[12.5px] font-semibold text-[#6B7280]">
+                      The Challenge
+                    </h4>
+                    <p className="mt-2 text-[14.5px] leading-[1.6] text-[#10161C]">
+                      {selectedProject.problem}
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-[12.5px] font-semibold text-[#6B7280]">
+                      Role &amp; Outcome
+                    </h4>
+                    <p className="mt-2 text-[14.5px] leading-[1.6] text-[#10161C]">
+                      {selectedProject.role}
+                    </p>
+                    <p className="mt-2 text-[14px] font-medium leading-[1.55] text-[#2CA884]">
+                      {selectedProject.outcome}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="border-t border-[#E7E4DD] pt-6">
+                  <h4 className="text-[12.5px] font-semibold text-[#6B7280]">
+                    Key Contributions
+                  </h4>
+                  <ul className="mt-3 space-y-2.5 text-[14.5px] leading-[1.6] text-[#374151]">
+                    {selectedProject.highlights.map((point) => (
+                      <li key={point} className="flex items-start gap-2.5">
+                        <span
+                          className="mt-1 font-semibold text-[#2CA884]"
+                          aria-hidden="true"
+                        >
+                          —
+                        </span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Modal Footer Actions */}
+                <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#E7E4DD] pt-6">
+                  {selectedProject.liveUrl ? (
+                    <a
+                      href={selectedProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2.5 rounded-full bg-[#0F171E] px-6 py-3 text-[13.5px] font-medium text-white transition-colors hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] whitespace-nowrap"
+                    >
+                      {selectedProject.liveLabel ?? "Open live project"}
+                      <ArrowUpRight className="h-4 w-4" />
+                    </a>
+                  ) : (
+                    <a
+                      href="mailto:rolan.bacalla@gmail.com?subject=Case%20Study%20Walkthrough%20Request"
+                      className="inline-flex items-center gap-2.5 rounded-full bg-[#0F171E] px-6 py-3 text-[13.5px] font-medium text-white transition-colors hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] whitespace-nowrap"
+                    >
+                      Request full walkthrough
+                      <ArrowRight className="h-4 w-4" />
+                    </a>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProject(null)}
+                    className="rounded-full border border-[#DCD8CE] px-5 py-2.5 text-[13.5px] font-medium text-[#10161C] transition-colors hover:bg-[#EFECE5] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10161C] whitespace-nowrap cursor-pointer"
+                  >
+                    Close overview
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
