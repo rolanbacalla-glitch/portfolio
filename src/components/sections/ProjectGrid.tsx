@@ -33,7 +33,11 @@ function ProjectIcon({ type }: { type: CaseStudy["icon"] }) {
   }
 }
 
-export default function ProjectGrid() {
+interface ProjectGridProps {
+  onOpenVisualArchive?: () => void;
+}
+
+export default function ProjectGrid({ onOpenVisualArchive }: ProjectGridProps) {
   const [selectedProject, setSelectedProject] = useState<CaseStudy | null>(null);
 
   useEffect(() => {
@@ -61,26 +65,39 @@ export default function ProjectGrid() {
       className="relative overflow-hidden rounded-[28px] bg-[#FAF8F5] px-6 py-10 text-[#10161C] shadow-[0_1px_3px_rgba(16,22,28,0.04)] sm:px-10 sm:py-12 lg:rounded-[36px] lg:px-14 lg:py-14"
     >
       {/* Header Row */}
-      <div className="mb-10 max-w-2xl lg:mb-12">
-        <div className="inline-flex items-center gap-3">
-          <span className="inline-flex h-7 min-w-[38px] items-center justify-center rounded-full bg-[#10161C] px-3 text-[11px] font-semibold tracking-wide text-white tabular-nums">
-            03
-          </span>
-          <span className="text-[14px] font-semibold tracking-[-0.01em] text-[#10161C]">
-            Selected Case Studies
-          </span>
+      <div className="mb-10 flex flex-col gap-6 lg:mb-12 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-2xl">
+          <div className="inline-flex items-center gap-3">
+            <span className="inline-flex h-7 min-w-[38px] items-center justify-center rounded-full bg-[#10161C] px-3 text-[11px] font-semibold tracking-wide text-white tabular-nums">
+              03
+            </span>
+            <span className="text-[14px] font-semibold tracking-[-0.01em] text-[#10161C]">
+              Selected Case Studies
+            </span>
+          </div>
+
+          <h2 className="mt-6 font-heading text-[2.5rem] font-extrabold leading-[1.02] tracking-[-0.035em] text-[#10161C] sm:text-[3.25rem]">
+            Case studies grounded in{" "}
+            <span className="text-[#2CA884]">real product challenges.</span>
+          </h2>
+
+          <p className="mt-4 max-w-xl text-[15px] leading-[1.6] text-[#6B7280]">
+            A selection of product design work spanning connected audio, companion
+            apps, UX research, and design systems — each focused on clear
+            usability and thoughtful execution.
+          </p>
         </div>
 
-        <h2 className="mt-6 font-heading text-[2.5rem] font-extrabold leading-[1.02] tracking-[-0.035em] text-[#10161C] sm:text-[3.25rem]">
-          Case studies grounded in{" "}
-          <span className="text-[#2CA884]">real product challenges.</span>
-        </h2>
-
-        <p className="mt-4 max-w-xl text-[15px] leading-[1.6] text-[#6B7280]">
-          A selection of product design work spanning connected audio, companion
-          apps, UX research, and design systems — each focused on clear
-          usability and thoughtful execution.
-        </p>
+        {onOpenVisualArchive && (
+          <button
+            type="button"
+            onClick={onOpenVisualArchive}
+            className="inline-flex min-h-[46px] shrink-0 cursor-pointer items-center gap-2 self-start rounded-full bg-[#0F171E] px-6 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] whitespace-nowrap lg:self-end"
+          >
+            Visual Archive (18)
+            <ArrowUpRight className="h-4 w-4 text-[#54D6AE]" aria-hidden="true" />
+          </button>
+        )}
       </div>
 
       {/* Portfolio Work Cards — Converted to the New Vertical Full-Bleed Card Design */}

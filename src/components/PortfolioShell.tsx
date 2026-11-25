@@ -1,11 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import HeroSection from "@/components/sections/HeroSection";
 import ApproachSection from "@/components/sections/ApproachSection";
 import ProjectGrid from "@/components/sections/ProjectGrid";
 import AboutContactSection from "@/components/sections/AboutContactSection";
+import VisualArchivePopout from "@/components/sections/VisualArchivePopout";
 
 export default function PortfolioShell() {
+  const [archiveOpen, setArchiveOpen] = useState(false);
+
   const handleJumpToWork = () => {
     const workSection = document.getElementById("work");
     if (workSection) {
@@ -19,11 +23,16 @@ export default function PortfolioShell() {
         <div className="mx-auto max-w-[1380px] space-y-5 lg:space-y-6">
           <HeroSection onSelectDiscipline={handleJumpToWork} />
           <ApproachSection />
-          <ProjectGrid />
+          <ProjectGrid onOpenVisualArchive={() => setArchiveOpen(true)} />
         </div>
       </main>
 
-      <AboutContactSection />
+      <AboutContactSection onOpenVisualArchive={() => setArchiveOpen(true)} />
+
+      <VisualArchivePopout
+        isOpen={archiveOpen}
+        onClose={() => setArchiveOpen(false)}
+      />
     </div>
   );
 }
