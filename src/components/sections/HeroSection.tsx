@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { heroDisciplines, type WorkCategory } from "@/data/portfolio";
+import BrandLogo from "@/components/BrandLogo";
 
 interface HeroSectionProps {
   onSelectDiscipline: (category: Exclude<WorkCategory, "All">) => void;
@@ -36,6 +37,15 @@ function DisciplineIcon({ type }: { type: "lightbulb" | "monitor" | "chart" }) {
 
 export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [logoHoverCount, setLogoHoverCount] = useState(0);
+  const lastLogoHoverRef = useRef(0);
+
+  const handleLogoHover = () => {
+    const now = Date.now();
+    if (now - lastLogoHoverRef.current < 500) return;
+    lastLogoHoverRef.current = now;
+    setLogoHoverCount((prev) => prev + 1);
+  };
 
   return (
     <section
@@ -47,19 +57,11 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
         {/* Brand Mark + Name Lockup */}
         <a
           href="#top"
+          onMouseEnter={handleLogoHover}
           className="group inline-flex shrink-0 items-center gap-3.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2CA884]"
           aria-label="Rolan Bacalla — Home"
         >
-          {/* Geometric 4-petal studio emblem matching the drafted design */}
-          <span
-            className="grid h-9 w-9 shrink-0 grid-cols-2 gap-[3px] transition-transform duration-300 group-hover:rotate-45"
-            aria-hidden="true"
-          >
-            <span className="rounded-tl-full rounded-tr-full rounded-bl-full rounded-br-[3px] bg-[#10161C]" />
-            <span className="rounded-tl-full rounded-tr-full rounded-br-full rounded-bl-[3px] bg-[#10161C]" />
-            <span className="rounded-tl-full rounded-bl-full rounded-br-full rounded-tr-[3px] bg-[#10161C]" />
-            <span className="rounded-tr-full rounded-bl-full rounded-br-full rounded-tl-[3px] bg-[#10161C]" />
-          </span>
+          <BrandLogo triggerCount={logoHoverCount} />
 
           <span className="flex flex-col">
             <span className="font-heading text-[20px] font-semibold leading-none tracking-[0.04em] text-[#10161C] whitespace-nowrap">
