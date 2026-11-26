@@ -12,10 +12,13 @@ interface LayerConfig {
   size: number;
   slots: readonly [Point, Point, Point, Point];
   startIndex: number;
-  delay: number;
   expand: boolean;
+  times: readonly number[];
+  ease: readonly (CubicBezier | "linear")[];
   className: string;
 }
+
+type CubicBezier = [number, number, number, number];
 
 /**
  * Counter-clockwise orbit slots inside the 36px × 36px brand mark.
@@ -47,39 +50,49 @@ const TAIL_SLOTS: readonly [Point, Point, Point, Point] = [
 /** Full 360° counter-clockwise revolution duration (0.65s per 90° step). */
 const LOOP_DURATION_S = 2.6;
 
-type CubicBezier = [number, number, number, number];
 const EXPAND_EASE: CubicBezier = [0.4, 0, 0.2, 1];
 const CONTRACT_BOUNCE_EASE: CubicBezier = [0.34, 1.24, 0.64, 1];
 const TRAIL_BOUNCE_EASE: CubicBezier = [0.34, 1.2, 0.64, 1];
 
-/** 13-point timeline for the lead square: start → 2-block expand → contract → hold. */
+/**
+ * Shared 13-point normalised timelines across 4 quarter-turns:
+ * - Lead:  0.00→0.10 expand to 2 blocks, 0.10→0.21 contract into 1 block, 0.21→0.25 hold
+ * - Mid:   0.00→0.10 wait while lead is 2 blocks, 0.10→0.22 glide as lead contracts, 0.22→0.25 hold
+ * - Tail:  0.00→0.125 wait + slight lag behind mid, 0.125→0.24 glide, 0.24→0.25 hold
+ */
 const LEAD_TIMES = [
   0.0, 0.1, 0.21, 0.25,
   0.35, 0.46, 0.5,
   0.6, 0.71, 0.75,
   0.85, 0.96, 1.0,
+] as const;
+
+const MID_TIMES = [
+  0.0, 0.1, 0.22, 0.25,
+  0.35, 0.47, 0.5,
+  0.6, 0.72, 0.75,
+  0.85, 0.97, 1.0,
+] as const;
+
+const TAIL_TIMES = [
+  0.0, 0.125, 0.24, 0.25,
+  0.375, 0.49, 0.5,
+  0.625, 0.74, 0.75,
+  0.875, 0.99, 1.0,
+] as const;
+
+const LEAD_EASES: readonly (CubicBezier | "linear")[] = [
+  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
+  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
+  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
+  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
 ];
 
-const LEAD_EASES: (CubicBezier | "linear")[] = [
-  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
-  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
-  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
-  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
-];
-
-/** 9-point timeline for trailing 1-block squares: slide corner-to-corner → brief hold. */
-const TRAIL_TIMES = [
-  0.0, 0.21, 0.25,
-  0.46, 0.5,
-  0.71, 0.75,
-  0.96, 1.0,
-];
-
-const TRAIL_EASES: (CubicBezier | "linear")[] = [
-  TRAIL_BOUNCE_EASE, "linear",
-  TRAIL_BOUNCE_EASE, "linear",
-  TRAIL_BOUNCE_EASE, "linear",
-  TRAIL_BOUNCE_EASE, "linear",
+const TRAIL_EASES: readonly (CubicBezier | "linear")[] = [
+  "linear", TRAIL_BOUNCE_EASE, "linear",
+  "linear", TRAIL_BOUNCE_EASE, "linear",
+  "linear", TRAIL_BOUNCE_EASE, "linear",
+  "linear", TRAIL_BOUNCE_EASE, "linear",
 ];
 
 const LAYERS: readonly LayerConfig[] = [
@@ -88,8 +101,9 @@ const LAYERS: readonly LayerConfig[] = [
     size: 12.5,
     slots: TAIL_SLOTS,
     startIndex: 0, // Top-Left (2 steps behind Lead)
-    delay: 0.15,
     expand: false,
+    times: TAIL_TIMES,
+    ease: TRAIL_EASES,
     className: "z-10 bg-[#10161C]/18",
   },
   {
@@ -97,8 +111,9 @@ const LAYERS: readonly LayerConfig[] = [
     size: 15,
     slots: MID_SLOTS,
     startIndex: 1, // Bottom-Left (1 step behind Lead)
-    delay: 0.075,
     expand: false,
+    times: MID_TIMES,
+    ease: TRAIL_EASES,
     className: "z-20 bg-[#10161C]/32",
   },
   {
@@ -106,17 +121,19 @@ const LAYERS: readonly LayerConfig[] = [
     size: 16,
     slots: LEAD_SLOTS,
     startIndex: 2, // Bottom-Right (leading foreground square)
-    delay: 0,
     expand: true,
+    times: LEAD_TIMES,
+    ease: LEAD_EASES,
     className: "z-30 bg-[#10161C]",
   },
 ];
 
 /**
- * Builds keyframes for the leading square (expands into 2 blocks before contracting)
- * or trailing squares (remains a single 1×1 block following behind).
+ * Builds synchronised 13-keyframe sequences:
+ * - Lead expands into 2 blocks, then contracts into the next CCW corner.
+ * - Mid and Tail hold in place while Lead is expanded, then glide forward as Lead contracts.
  */
-function buildLayerAnimation(layer: LayerConfig) {
+function buildLayerKeyframes(layer: LayerConfig) {
   const { slots, startIndex, size, expand } = layer;
   const x: number[] = [];
   const y: number[] = [];
@@ -134,14 +151,20 @@ function buildLayerAnimation(layer: LayerConfig) {
     const to = slots[(startIndex + q + 1) % 4];
 
     if (expand) {
-      // Expand into a 2-block bar spanning both `from` and `to`
+      // Lead expands into a 2-block bar spanning `from` and `to`
       x.push(Math.min(from.x, to.x));
       y.push(Math.min(from.y, to.y));
       width.push(Math.abs(to.x - from.x) + size);
       height.push(Math.abs(to.y - from.y) + size);
+    } else {
+      // Trailing blocks hold at `from` while Lead is at 2-block size
+      x.push(from.x);
+      y.push(from.y);
+      width.push(size);
+      height.push(size);
     }
 
-    // Arrive at `to` as a single square
+    // Lead contracts into `to`; trailing blocks glide into `to` as Lead vacates it
     x.push(to.x);
     y.push(to.y);
     width.push(size);
@@ -154,16 +177,12 @@ function buildLayerAnimation(layer: LayerConfig) {
     height.push(size);
   }
 
-  return {
-    keyframes: { x, y, width, height },
-    times: expand ? LEAD_TIMES : TRAIL_TIMES,
-    ease: expand ? LEAD_EASES : TRAIL_EASES,
-  };
+  return { x, y, width, height };
 }
 
 const LAYER_ANIMATIONS = LAYERS.map((layer) => ({
   layer,
-  ...buildLayerAnimation(layer),
+  keyframes: buildLayerKeyframes(layer),
 }));
 
 export default function BrandLogo() {
@@ -174,7 +193,7 @@ export default function BrandLogo() {
       className="relative inline-block h-9 w-9 shrink-0 overflow-visible"
       aria-hidden="true"
     >
-      {LAYER_ANIMATIONS.map(({ layer, keyframes, times, ease }) => {
+      {LAYER_ANIMATIONS.map(({ layer, keyframes }) => {
         const start = layer.slots[layer.startIndex];
 
         return (
@@ -201,9 +220,8 @@ export default function BrandLogo() {
                 ? { duration: 0 }
                 : {
                     duration: LOOP_DURATION_S,
-                    times,
-                    ease,
-                    delay: layer.delay,
+                    times: [...layer.times],
+                    ease: [...layer.ease],
                     repeat: Infinity,
                   }
             }
