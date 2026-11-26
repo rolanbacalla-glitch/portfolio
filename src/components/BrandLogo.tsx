@@ -13,6 +13,7 @@ interface LayerConfig {
   slots: readonly [Point, Point, Point, Point];
   startIndex: number;
   delay: number;
+  expand: boolean;
   className: string;
 }
 
@@ -46,27 +47,39 @@ const TAIL_SLOTS: readonly [Point, Point, Point, Point] = [
 /** Full 360° counter-clockwise revolution duration (0.65s per 90° step). */
 const LOOP_DURATION_S = 2.6;
 
-/**
- * 13-point normalised timeline across 4 quarter-turns:
- * Each quarter: start square → expand to 2 blocks → contract into next square → brief hold.
- */
-const KEYFRAME_TIMES = [
+type CubicBezier = [number, number, number, number];
+const EXPAND_EASE: CubicBezier = [0.4, 0, 0.2, 1];
+const CONTRACT_BOUNCE_EASE: CubicBezier = [0.34, 1.24, 0.64, 1];
+const TRAIL_BOUNCE_EASE: CubicBezier = [0.34, 1.2, 0.64, 1];
+
+/** 13-point timeline for the lead square: start → 2-block expand → contract → hold. */
+const LEAD_TIMES = [
   0.0, 0.1, 0.21, 0.25,
   0.35, 0.46, 0.5,
   0.6, 0.71, 0.75,
   0.85, 0.96, 1.0,
 ];
 
-type CubicBezier = [number, number, number, number];
-const EXPAND_EASE: CubicBezier = [0.4, 0, 0.2, 1];
-const CONTRACT_BOUNCE_EASE: CubicBezier = [0.34, 1.24, 0.64, 1];
+const LEAD_EASES: (CubicBezier | "linear")[] = [
+  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
+  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
+  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
+  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
+];
 
-/** Per-segment easing (12 segments between 13 keyframes). */
-const KEYFRAME_EASES: (CubicBezier | "linear")[] = [
-  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
-  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
-  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
-  EXPAND_EASE, CONTRACT_BOUNCE_EASE, "linear",
+/** 9-point timeline for trailing 1-block squares: slide corner-to-corner → brief hold. */
+const TRAIL_TIMES = [
+  0.0, 0.21, 0.25,
+  0.46, 0.5,
+  0.71, 0.75,
+  0.96, 1.0,
+];
+
+const TRAIL_EASES: (CubicBezier | "linear")[] = [
+  TRAIL_BOUNCE_EASE, "linear",
+  TRAIL_BOUNCE_EASE, "linear",
+  TRAIL_BOUNCE_EASE, "linear",
+  TRAIL_BOUNCE_EASE, "linear",
 ];
 
 const LAYERS: readonly LayerConfig[] = [
@@ -76,6 +89,7 @@ const LAYERS: readonly LayerConfig[] = [
     slots: TAIL_SLOTS,
     startIndex: 0, // Top-Left (2 steps behind Lead)
     delay: 0.15,
+    expand: false,
     className: "z-10 bg-[#10161C]/18",
   },
   {
@@ -84,6 +98,7 @@ const LAYERS: readonly LayerConfig[] = [
     slots: MID_SLOTS,
     startIndex: 1, // Bottom-Left (1 step behind Lead)
     delay: 0.075,
+    expand: false,
     className: "z-20 bg-[#10161C]/32",
   },
   {
@@ -92,17 +107,17 @@ const LAYERS: readonly LayerConfig[] = [
     slots: LEAD_SLOTS,
     startIndex: 2, // Bottom-Right (leading foreground square)
     delay: 0,
+    expand: true,
     className: "z-30 bg-[#10161C]",
   },
 ];
 
 /**
- * Builds the 13-keyframe x/y/width/height sequence so each square expands
- * into a 2-block bar bridging its current and next CCW corner before
- * contracting back into a single square at the destination corner.
+ * Builds keyframes for the leading square (expands into 2 blocks before contracting)
+ * or trailing squares (remains a single 1×1 block following behind).
  */
-function buildStretchKeyframes(layer: LayerConfig) {
-  const { slots, startIndex, size } = layer;
+function buildLayerAnimation(layer: LayerConfig) {
+  const { slots, startIndex, size, expand } = layer;
   const x: number[] = [];
   const y: number[] = [];
   const width: number[] = [];
@@ -118,37 +133,37 @@ function buildStretchKeyframes(layer: LayerConfig) {
     const from = slots[(startIndex + q) % 4];
     const to = slots[(startIndex + q + 1) % 4];
 
-    // Expanded 2-block bar spanning both `from` and `to`
-    const stretchX = Math.min(from.x, to.x);
-    const stretchY = Math.min(from.y, to.y);
-    const stretchW = Math.abs(to.x - from.x) + size;
-    const stretchH = Math.abs(to.y - from.y) + size;
+    if (expand) {
+      // Expand into a 2-block bar spanning both `from` and `to`
+      x.push(Math.min(from.x, to.x));
+      y.push(Math.min(from.y, to.y));
+      width.push(Math.abs(to.x - from.x) + size);
+      height.push(Math.abs(to.y - from.y) + size);
+    }
 
-    // 1. Expand into 2 blocks
-    x.push(stretchX);
-    y.push(stretchY);
-    width.push(stretchW);
-    height.push(stretchH);
-
-    // 2. Contract back to 1 square at `to`
+    // Arrive at `to` as a single square
     x.push(to.x);
     y.push(to.y);
     width.push(size);
     height.push(size);
 
-    // 3. Brief crisp hold at `to`
+    // Brief crisp hold at `to`
     x.push(to.x);
     y.push(to.y);
     width.push(size);
     height.push(size);
   }
 
-  return { x, y, width, height };
+  return {
+    keyframes: { x, y, width, height },
+    times: expand ? LEAD_TIMES : TRAIL_TIMES,
+    ease: expand ? LEAD_EASES : TRAIL_EASES,
+  };
 }
 
-const LAYER_KEYFRAMES = LAYERS.map((layer) => ({
+const LAYER_ANIMATIONS = LAYERS.map((layer) => ({
   layer,
-  keyframes: buildStretchKeyframes(layer),
+  ...buildLayerAnimation(layer),
 }));
 
 export default function BrandLogo() {
@@ -159,7 +174,7 @@ export default function BrandLogo() {
       className="relative inline-block h-9 w-9 shrink-0 overflow-visible"
       aria-hidden="true"
     >
-      {LAYER_KEYFRAMES.map(({ layer, keyframes }) => {
+      {LAYER_ANIMATIONS.map(({ layer, keyframes, times, ease }) => {
         const start = layer.slots[layer.startIndex];
 
         return (
@@ -186,8 +201,8 @@ export default function BrandLogo() {
                 ? { duration: 0 }
                 : {
                     duration: LOOP_DURATION_S,
-                    times: KEYFRAME_TIMES,
-                    ease: KEYFRAME_EASES,
+                    times,
+                    ease,
                     delay: layer.delay,
                     repeat: Infinity,
                   }

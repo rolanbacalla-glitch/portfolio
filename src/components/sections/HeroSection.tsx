@@ -57,8 +57,8 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
             <span className="font-heading text-[20px] font-semibold leading-none tracking-[0.04em] text-[#10161C] whitespace-nowrap">
               ROLAN
             </span>
-            <span className="mt-1 text-[11px] font-medium leading-none text-[#6B7280] whitespace-nowrap">
-              UX/UI Designer
+            <span className="mt-1 text-[11px] font-medium leading-none tracking-[0.12em] text-[#6B7280] whitespace-nowrap">
+              BACALLA
             </span>
           </span>
         </a>
