@@ -16,13 +16,7 @@ const externalLinks = [
   },
 ];
 
-interface AboutContactSectionProps {
-  onOpenVisualArchive?: () => void;
-}
-
-export default function AboutContactSection({
-  onOpenVisualArchive,
-}: AboutContactSectionProps) {
+export default function AboutContactSection() {
   const [copied, setCopied] = useState(false);
 
   const handleCopyEmail = async () => {
@@ -112,16 +106,6 @@ export default function AboutContactSection({
                   <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                 </a>
               ))}
-              {onOpenVisualArchive && (
-                <button
-                  type="button"
-                  onClick={onOpenVisualArchive}
-                  className="inline-flex cursor-pointer items-center gap-1.5 underline-offset-4 transition-colors hover:text-[#10161C] hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1D7A5E] whitespace-nowrap"
-                >
-                  Visual Archive (18)
-                  <ArrowUpRight className="h-4 w-4 text-[#1D7A5E]" aria-hidden="true" />
-                </button>
-              )}
             </nav>
           </div>
         </div>

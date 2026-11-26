@@ -1,6 +1,11 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import {
+  useAnimate,
+  useReducedMotion,
+  type AnimationPlaybackControls,
+} from "framer-motion";
 
 interface Point {
   x: number;
@@ -187,48 +192,71 @@ const LAYER_ANIMATIONS = LAYERS.map((layer) => ({
 
 export default function BrandLogo() {
   const prefersReducedMotion = useReducedMotion();
+  const [scope, animate] = useAnimate<HTMLButtonElement>();
+  const controlsRef = useRef<AnimationPlaybackControls[]>([]);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const controls = LAYER_ANIMATIONS.map(({ layer, keyframes }) =>
+      animate(`[data-logo-layer="${layer.id}"]`, keyframes, {
+        duration: LOOP_DURATION_S,
+        times: [...layer.times],
+        ease: [...layer.ease],
+        repeat: Infinity,
+      })
+    );
+
+    controlsRef.current = controls;
+
+    return () => {
+      controls.forEach((control) => control.stop());
+      controlsRef.current = [];
+    };
+  }, [animate, prefersReducedMotion]);
+
+  const handleTogglePlayback = () => {
+    if (prefersReducedMotion) return;
+
+    const nextPaused = !isPaused;
+    setIsPaused(nextPaused);
+    controlsRef.current.forEach((control) => {
+      if (nextPaused) {
+        control.pause();
+      } else {
+        control.play();
+      }
+    });
+  };
 
   return (
-    <span
-      className="relative inline-block h-9 w-9 shrink-0 overflow-visible"
-      aria-hidden="true"
+    <button
+      ref={scope}
+      type="button"
+      onClick={handleTogglePlayback}
+      aria-pressed={isPaused}
+      aria-label={isPaused ? "Resume logo animation" : "Pause logo animation"}
+      title={isPaused ? "Click to resume animation" : "Click to pause animation"}
+      className="relative inline-block h-9 w-9 shrink-0 cursor-pointer overflow-visible rounded-[6px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2CA884]"
     >
-      {LAYER_ANIMATIONS.map(({ layer, keyframes }) => {
+      {LAYER_ANIMATIONS.map(({ layer }) => {
         const start = layer.slots[layer.startIndex];
 
         return (
-          <motion.span
+          <span
             key={layer.id}
-            initial={{
-              x: start.x,
-              y: start.y,
+            data-logo-layer={layer.id}
+            style={{
+              transform: `translateX(${start.x}px) translateY(${start.y}px)`,
               width: layer.size,
               height: layer.size,
             }}
-            animate={
-              prefersReducedMotion
-                ? {
-                    x: start.x,
-                    y: start.y,
-                    width: layer.size,
-                    height: layer.size,
-                  }
-                : keyframes
-            }
-            transition={
-              prefersReducedMotion
-                ? { duration: 0 }
-                : {
-                    duration: LOOP_DURATION_S,
-                    times: [...layer.times],
-                    ease: [...layer.ease],
-                    repeat: Infinity,
-                  }
-            }
-            className={`absolute top-0 left-0 rounded-[5px] will-change-transform ${layer.className}`}
+            className={`pointer-events-none absolute top-0 left-0 rounded-[5px] will-change-transform ${layer.className}`}
+            aria-hidden="true"
           />
         );
       })}
-    </span>
+    </button>
   );
 }

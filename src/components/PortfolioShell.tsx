@@ -27,7 +27,7 @@ export default function PortfolioShell() {
         </div>
       </main>
 
-      <AboutContactSection onOpenVisualArchive={() => setArchiveOpen(true)} />
+      <AboutContactSection />
 
       <VisualArchivePopout
         isOpen={archiveOpen}

@@ -46,22 +46,22 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
       {/* Top Bar inside Sheet 01 */}
       <header className="mb-10 flex items-center justify-between gap-6 lg:mb-12">
         {/* Brand Mark + Name Lockup */}
-        <a
-          href="#top"
-          className="group inline-flex shrink-0 items-center gap-3.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2CA884]"
-          aria-label="Rolan Bacalla — Home"
-        >
+        <div className="inline-flex shrink-0 items-center gap-3.5">
           <BrandLogo />
 
-          <span className="flex flex-col">
+          <a
+            href="#top"
+            className="group flex flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2CA884]"
+            aria-label="Rolan Bacalla — Home"
+          >
             <span className="font-heading text-[20px] font-semibold leading-none tracking-[0.04em] text-[#10161C] whitespace-nowrap">
               ROLAN
             </span>
             <span className="mt-1 text-[11px] font-medium leading-none tracking-[0.12em] text-[#6B7280] whitespace-nowrap">
               BACALLA
             </span>
-          </span>
-        </a>
+          </a>
+        </div>
 
         {/* Desktop Minimal Nav with × separators */}
         <nav
