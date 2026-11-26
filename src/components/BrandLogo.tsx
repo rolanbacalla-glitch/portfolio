@@ -9,57 +9,52 @@ import { motion, useReducedMotion } from "framer-motion";
  * Order: Top-Left → Bottom-Left → Bottom-Right → Top-Right (CCW).
  */
 const CCW_SLOTS = [
-  { x: 0, y: 0 }, // 0: Top-Left
+  { x: 0, y: 0 }, // 0: Top-Left (starts empty)
   { x: 0, y: 20 }, // 1: Bottom-Left
   { x: 20, y: 20 }, // 2: Bottom-Right
   { x: 20, y: 0 }, // 3: Top-Right
 ] as const;
 
-const SQUARES = [0, 1, 2, 3] as const;
+/**
+ * Three squares starting in Top-Right (3), Bottom-Right (2), and Bottom-Left (1),
+ * leaving Top-Left (0) empty.
+ * Each tick advances exactly one square counter-clockwise into the empty slot:
+ *   Tick 1: TR → TL
+ *   Tick 2: BR → TR
+ *   Tick 3: BL → BR
+ *   Tick 4: TL → BL
+ */
+const INITIAL_SQUARE_SLOTS = [3, 2, 1] as const;
 
-/** Stagger between consecutive squares so each visibly nudges the next (seconds). */
-const PUSH_STAGGER_S = 0.068;
+/** Duration of each individual square's slide animation (seconds / milliseconds). */
+const STEP_DURATION_S = 0.8;
+const STEP_DURATION_MS = STEP_DURATION_S * 1000;
 
-/** Pause between ambient counter-clockwise push cycles (milliseconds). */
-const CYCLE_INTERVAL_MS = 2600;
-
-interface BrandLogoProps {
-  /** Incremented by the parent (e.g. on link hover) to trigger an immediate push. */
-  triggerCount?: number;
-}
-
-export default function BrandLogo({ triggerCount = 0 }: BrandLogoProps) {
+export default function BrandLogo() {
   const prefersReducedMotion = useReducedMotion();
-  const [ambientStep, setAmbientStep] = useState(0);
+  const [tick, setTick] = useState(0);
 
-  const step = prefersReducedMotion ? 0 : ambientStep + triggerCount;
-
-  // Ambient counter-clockwise push loop; automatically resets after any hover push
   useEffect(() => {
     if (prefersReducedMotion) return;
 
-    const delay = step === 0 ? 1200 : CYCLE_INTERVAL_MS;
-    const timer = window.setTimeout(() => {
-      setAmbientStep((prev) => prev + 1);
-    }, delay);
+    const interval = window.setInterval(() => {
+      setTick((prev) => prev + 1);
+    }, STEP_DURATION_MS);
 
-    return () => window.clearTimeout(timer);
-  }, [step, prefersReducedMotion]);
+    return () => window.clearInterval(interval);
+  }, [prefersReducedMotion]);
+
+  const activeTick = prefersReducedMotion ? 0 : tick;
 
   return (
     <span
       className="relative inline-block h-9 w-9 shrink-0"
       aria-hidden="true"
     >
-      {SQUARES.map((squareIndex) => {
-        const currentSlot = (squareIndex + step) % 4;
-        const previousSlot = (squareIndex + step - 1 + 4) % 4;
+      {INITIAL_SQUARE_SLOTS.map((initialSlot, squareIndex) => {
+        const moves = Math.floor((activeTick + 2 - squareIndex) / 3);
+        const currentSlot = (initialSlot + moves) % 4;
         const target = CCW_SLOTS[currentSlot];
-
-        // Initiate the push wave from the Top-Left slot (previousSlot === 0)
-        // so TL pushes BL → BL pushes BR → BR pushes TR → TR glides into TL.
-        const staggerDelay =
-          step === 0 || prefersReducedMotion ? 0 : previousSlot * PUSH_STAGGER_S;
 
         return (
           <motion.span
@@ -73,11 +68,8 @@ export default function BrandLogo({ triggerCount = 0 }: BrandLogoProps) {
               prefersReducedMotion
                 ? { duration: 0 }
                 : {
-                    type: "spring",
-                    stiffness: 380,
-                    damping: 26,
-                    mass: 0.82,
-                    delay: staggerDelay,
+                    duration: STEP_DURATION_S,
+                    ease: [0.65, 0, 0.35, 1],
                   }
             }
             className="absolute top-0 left-0 h-4 w-4 rounded-[5px] bg-[#10161C] will-change-transform"

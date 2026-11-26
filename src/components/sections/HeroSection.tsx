@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -37,15 +37,6 @@ function DisciplineIcon({ type }: { type: "lightbulb" | "monitor" | "chart" }) {
 
 export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [logoHoverCount, setLogoHoverCount] = useState(0);
-  const lastLogoHoverRef = useRef(0);
-
-  const handleLogoHover = () => {
-    const now = Date.now();
-    if (now - lastLogoHoverRef.current < 500) return;
-    lastLogoHoverRef.current = now;
-    setLogoHoverCount((prev) => prev + 1);
-  };
 
   return (
     <section
@@ -57,11 +48,10 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
         {/* Brand Mark + Name Lockup */}
         <a
           href="#top"
-          onMouseEnter={handleLogoHover}
           className="group inline-flex shrink-0 items-center gap-3.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2CA884]"
           aria-label="Rolan Bacalla — Home"
         >
-          <BrandLogo triggerCount={logoHoverCount} />
+          <BrandLogo />
 
           <span className="flex flex-col">
             <span className="font-heading text-[20px] font-semibold leading-none tracking-[0.04em] text-[#10161C] whitespace-nowrap">
