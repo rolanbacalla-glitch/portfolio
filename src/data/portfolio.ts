@@ -45,7 +45,7 @@ export interface ApproachStep {
   icon: "search" | "target" | "pencil" | "check";
 }
 
-export const COFFEE_BREAK_URL = "https://coffee-break.rolanbacalla.space/";
+export const COFFEE_BREAK_URL = "https://games.rolanbacalla.online/";
 export const INITIAL_VISIBLE_PROJECTS = 6;
 
 export type CaseStudyIcon =
