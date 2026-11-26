@@ -11,6 +11,18 @@ import caseTravelKinImg from "@/assets/images/case_travel_kin_1795370238144.jpg"
 import caseLyndaPlusImg from "@/assets/images/case_lynda_plus_1795370180138.jpg";
 import caseDesignSystemsImg from "@/assets/images/case_design_systems_1795370237571.jpg";
 import caseNestWalletImg from "@/assets/images/case_nest_wallet_1795370175156.jpg";
+import caseCambridgeAudioOledImg from "@/assets/images/case_cambridge_audio_oled_1795704500782.jpg";
+import caseCoffeeBreakHubImg from "@/assets/images/case_coffee_break_hub_1795704509585.jpg";
+import caseApexStrategistImg from "@/assets/images/case_apex_strategist_1795704520000.jpg";
+import caseSmartChargeEvImg from "@/assets/images/case_smartcharge_ev_1795704497866.jpg";
+import caseTokenArchitectureSpecImg from "@/assets/images/case_token_architecture_spec_1795704505964.jpg";
+import caseCheckoutFlowImg from "@/assets/images/case_checkout_flow_1795704517929.jpg";
+import caseAtomAtelierDashboardsImg from "@/assets/images/case_atom_atelier_dashboards_1795704499525.jpg";
+import caseRoamTogetherImg from "@/assets/images/case_roam_together_1795704516761.jpg";
+import caseLyssnupPlayerImg from "@/assets/images/case_lyssnup_player_1795704525917.jpg";
+import caseCodyPhilipsImg from "@/assets/images/case_cody_philips_1795704499592.jpg";
+import caseWealthSaasLandingsImg from "@/assets/images/case_wealth_saas_landings_1795704509156.jpg";
+import caseHozahBrandSpatialImg from "@/assets/images/case_hozah_brand_spatial_1795704518520.jpg";
 
 import avatarLead1 from "@/assets/images/avatar_lead_1_1795370247707.jpg";
 import avatarLead2 from "@/assets/images/avatar_lead_2_1795370156756.jpg";
@@ -67,20 +79,6 @@ export type CaseStudyIcon =
   | "car"
   | "coffee";
 
-export type ArtworkMotif =
-  | "oled"
-  | "chart"
-  | "ev"
-  | "tokens"
-  | "checkout"
-  | "dashboard"
-  | "map"
-  | "vinyl"
-  | "editorial"
-  | "split"
-  | "spatial"
-  | "coffee";
-
 export interface CaseStudy {
   id: string;
   title: string;
@@ -94,14 +92,8 @@ export interface CaseStudy {
   outcome: string;
   highlights: string[];
   metrics?: string[];
-  image?: StaticImageData;
+  image: StaticImageData;
   imageAlt: string;
-  artworkTheme?: {
-    accent: string;
-    secondary: string;
-    motif: ArtworkMotif;
-    badge?: string;
-  };
   liveUrl?: string;
   liveLabel?: string;
 }
@@ -387,13 +379,8 @@ export const caseStudies: CaseStudy[] = [
       "Mapped 3 UK listener archetypes across an 18-screen zero-IP Wi-Fi onboarding flow.",
       "Synchronised real-time playback and source states between StreamMagic mobile surfaces and physical bezels.",
     ],
-    imageAlt: "Warm gold and cobalt rotary hi-fi OLED display geometry",
-    artworkTheme: {
-      accent: "#D4A359",
-      secondary: "#60A5FA",
-      motif: "oled",
-      badge: "Hardware + Mobile",
-    },
+    image: caseCambridgeAudioOledImg,
+    imageAlt: "Brushed dark aluminium hi-fi streamer with dual-concentric rotary dial and glowing OLED display on slate",
   },
   {
     id: "coffee-break-hub",
@@ -415,13 +402,8 @@ export const caseStudies: CaseStudy[] = [
       "Synthesised ceramic clicks, pentatonic chimes, and filtered kettle water streams purely via the Web Audio API.",
       "Built dual Alabaster Light and Obsidian Dark themes with full keyboard and mobile touch support.",
     ],
-    imageAlt: "Tactile geometric puzzle tiles and concentric pour-over rings",
-    artworkTheme: {
-      accent: "#54D6AE",
-      secondary: "#C8BFFF",
-      motif: "coffee",
-      badge: "Playable Hub",
-    },
+    image: caseCoffeeBreakHubImg,
+    imageAlt: "Matte ceramic V60 pour-over dripper beside interlocking ceramic puzzle tiles on warm pale oak",
     liveUrl: COFFEE_BREAK_URL,
     liveLabel: "Play Coffee Break",
   },
@@ -445,13 +427,8 @@ export const caseStudies: CaseStudy[] = [
       "Created plain-English Trade Advisor guardrails with pre-trade risk previews.",
       "Designed one-tap automated rebalance rules and calm threshold alerts.",
     ],
-    imageAlt: "Indigo and emerald telemetry curves over dark obsidian cards",
-    artworkTheme: {
-      accent: "#818CF8",
-      secondary: "#34D399",
-      motif: "chart",
-      badge: "12 Mobile Screens",
-    },
+    image: caseApexStrategistImg,
+    imageAlt: "Sculptural brushed-brass, dark-slate, and emerald-glass architectural balance blocks on obsidian stone",
   },
   {
     id: "smartcharge-ev",
@@ -473,13 +450,8 @@ export const caseStudies: CaseStudy[] = [
       "Built a desktop SaaS workspace tracking kWh consumption, tariff savings, and charger telemetry.",
       "Maintained cohesive tokenised components across light-mode SaaS tables and mobile controls.",
     ],
-    imageAlt: "Cobalt and emerald concentric energy charge rings",
-    artworkTheme: {
-      accent: "#3B82F6",
-      secondary: "#10B981",
-      motif: "ev",
-      badge: "Mobile + Desktop SaaS",
-    },
+    image: caseSmartChargeEvImg,
+    imageAlt: "Minimalist matte off-white and charcoal home EV wallbox charger on a poured-concrete wall",
   },
   {
     id: "token-architecture-spec",
@@ -501,13 +473,8 @@ export const caseStudies: CaseStudy[] = [
       "Specified focus-visible rings, target-size minimums, and reduced-motion fallbacks across every primitive.",
       "Aligned Figma Variables directly with production Tailwind CSS v4 custom properties.",
     ],
-    imageAlt: "Layered emerald and cobalt design token matrix",
-    artworkTheme: {
-      accent: "#2CA884",
-      secondary: "#3B82F6",
-      motif: "tokens",
-      badge: "3-Tier Spec",
-    },
+    image: caseTokenArchitectureSpecImg,
+    imageAlt: "Three stepped tiers of ceramic, brushed aluminium, and frosted glass design token swatches",
     liveUrl: "https://design-system.rolanbacalla.space/",
     liveLabel: "Inspect system",
   },
@@ -530,13 +497,8 @@ export const caseStudies: CaseStudy[] = [
       "Surfaced delivery dates and total GBP cost breakdowns early to eliminate basket shock.",
       "Designed unmistakable inline field recovery and high-trust order confirmation states.",
     ],
-    imageAlt: "Crisp stepped conversion funnel and payment confirmation geometry",
-    artworkTheme: {
-      accent: "#38BDF8",
-      secondary: "#10B981",
-      motif: "checkout",
-      badge: "7-Screen Flow",
-    },
+    image: caseCheckoutFlowImg,
+    imageAlt: "Matte stone-grey luxury parcel box and brushed-metal payment card on a dark limestone tray",
   },
   {
     id: "atom-atelier-dashboards",
@@ -557,13 +519,8 @@ export const caseStudies: CaseStudy[] = [
       "Designed responsive bento telemetry cards with clear primary vs secondary metric contrast.",
       "Standardised dark-mode surface elevation steps to separate filters, canvas, and drawers cleanly.",
     ],
-    imageAlt: "Panoramic dark SaaS bento telemetry grid",
-    artworkTheme: {
-      accent: "#10B981",
-      secondary: "#60A5FA",
-      motif: "dashboard",
-      badge: "5 SaaS Explorations",
-    },
+    image: caseAtomAtelierDashboardsImg,
+    imageAlt: "Modular dark obsidian glass bento planes with subtle emerald and cobalt edge reflections",
   },
   {
     id: "roam-together",
@@ -584,13 +541,8 @@ export const caseStudies: CaseStudy[] = [
       "Designed lightweight group voting chips so travellers converge on activities quickly.",
       "Used a warm terracotta-and-amber accent system to evoke sunlit editorial travel guides.",
     ],
-    imageAlt: "Warm terracotta route pins and topographic map contours",
-    artworkTheme: {
-      accent: "#F97316",
-      secondary: "#FBBF24",
-      motif: "map",
-      badge: "Mobile + Maps",
-    },
+    image: caseRoamTogetherImg,
+    imageAlt: "Sunlit terracotta stone terrace table with folded linen topographic map and brushed-brass compass",
   },
   {
     id: "lyssnup-player",
@@ -611,13 +563,8 @@ export const caseStudies: CaseStudy[] = [
       "Balanced obsidian dark and warm studio-grey themes with warm orange hardware-inspired accents.",
       "Optimised touch targets for tablet bedside/desk stands alongside desktop keyboard shortcuts.",
     ],
-    imageAlt: "Obsidian vinyl grooves and warm studio-orange waveform bars",
-    artworkTheme: {
-      accent: "#FB923C",
-      secondary: "#A1A1AA",
-      motif: "vinyl",
-      badge: "Dual-Mode Player",
-    },
+    image: caseLyssnupPlayerImg,
+    imageAlt: "Minimalist brushed-aluminium and matte-black vinyl turntable on walnut plinth under warm amber studio lighting",
   },
   {
     id: "cody-philips",
@@ -638,13 +585,8 @@ export const caseStudies: CaseStudy[] = [
       "Paired high-contrast editorial headings with disciplined grid spacing and warm gold rules.",
       "Designed responsive practice-area index pages and partner profile templates.",
     ],
-    imageAlt: "Editorial architectural columns in deep violet and warm gold",
-    artworkTheme: {
-      accent: "#F59E0B",
-      secondary: "#A78BFA",
-      motif: "editorial",
-      badge: "Multi-Page Web",
-    },
+    image: caseCodyPhilipsImg,
+    imageAlt: "Refined London gallery interior with fluted dark marble columns, deep plum panels, and brushed-brass trim",
   },
   {
     id: "wealth-saas-landings",
@@ -665,13 +607,8 @@ export const caseStudies: CaseStudy[] = [
       "Explored dark obsidian wealth aesthetics ('Command your financial universe') vs crisp editorial light SaaS.",
       "Engineered modular section rhythm that collapses cleanly onto single-column mobile viewports.",
     ],
-    imageAlt: "Contrasting indigo and cobalt conversion layout planes",
-    artworkTheme: {
-      accent: "#818CF8",
-      secondary: "#38BDF8",
-      motif: "split",
-      badge: "Conversion Web",
-    },
+    image: caseWealthSaasLandingsImg,
+    imageAlt: "Sculptural architectural contrast of matte dark obsidian stone planes meeting sunlit alabaster limestone",
   },
   {
     id: "hozah-brand-spatial",
@@ -692,13 +629,8 @@ export const caseStudies: CaseStudy[] = [
       "Designed high-legibility outdoor wayfinding, exhibition booth graphics, and print collateral.",
       "Maintained unmistakable colour and typographic consistency from mobile screens to 4-metre booth walls.",
     ],
-    imageAlt: "Teal and lime spatial wayfinding arcs and architectural grid",
-    artworkTheme: {
-      accent: "#2DD4BF",
-      secondary: "#A3E635",
-      motif: "spatial",
-      badge: "Identity + Spatial",
-    },
+    image: caseHozahBrandSpatialImg,
+    imageAlt: "Poured-concrete urban mobility pavilion with curved wayfinding arches and indirect teal and lime lighting",
   },
 ];
 

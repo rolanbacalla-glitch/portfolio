@@ -30,7 +30,6 @@ import {
 import {
   caseStudies,
   INITIAL_VISIBLE_PROJECTS,
-  type ArtworkMotif,
   type CaseStudy,
 } from "@/data/portfolio";
 
@@ -72,241 +71,6 @@ function ProjectIcon({ type }: { type: CaseStudy["icon"] }) {
     case "coffee":
       return <Coffee className={cls} strokeWidth={1.7} />;
   }
-}
-
-function MotifVector({
-  motif,
-  accent,
-  secondary,
-}: {
-  motif: ArtworkMotif;
-  accent: string;
-  secondary: string;
-}) {
-  switch (motif) {
-    case "oled":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-85"
-          aria-hidden="true"
-        >
-          <circle cx="180" cy="148" r="102" stroke={accent} strokeOpacity="0.28" strokeWidth="1.5" />
-          <circle
-            cx="180"
-            cy="148"
-            r="82"
-            stroke={accent}
-            strokeWidth="4"
-            strokeDasharray="340 180"
-            strokeLinecap="round"
-          />
-          <circle cx="180" cy="148" r="56" stroke={secondary} strokeOpacity="0.45" strokeWidth="1.5" strokeDasharray="4 6" />
-          <circle cx="180" cy="148" r="20" fill={accent} fillOpacity="0.2" stroke={accent} strokeWidth="2" />
-        </svg>
-      );
-    case "coffee":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-90"
-          aria-hidden="true"
-        >
-          <rect x="92" y="72" width="52" height="52" rx="12" fill={accent} fillOpacity="0.24" stroke={accent} strokeWidth="1.75" />
-          <rect x="154" y="72" width="52" height="52" rx="12" fill={secondary} fillOpacity="0.22" stroke={secondary} strokeWidth="1.75" />
-          <rect x="216" y="72" width="52" height="52" rx="12" stroke="white" strokeOpacity="0.18" strokeWidth="1.5" />
-          <rect x="92" y="134" width="52" height="52" rx="12" stroke="white" strokeOpacity="0.18" strokeWidth="1.5" />
-          <rect x="154" y="134" width="52" height="52" rx="12" fill={accent} fillOpacity="0.34" stroke={accent} strokeWidth="2" />
-          <circle cx="180" cy="160" r="8" fill="#0B0F14" stroke={accent} strokeWidth="2.5" />
-          <rect x="216" y="134" width="52" height="52" rx="12" fill={secondary} fillOpacity="0.18" stroke={secondary} strokeWidth="1.5" />
-        </svg>
-      );
-    case "chart":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-85"
-          aria-hidden="true"
-        >
-          <path d="M48 206 C108 198, 134 142, 186 150 C236 158, 262 96, 316 84" stroke={accent} strokeWidth="3.5" strokeLinecap="round" />
-          <path d="M48 228 C114 218, 152 186, 206 172 C254 160, 280 132, 316 122" stroke={secondary} strokeOpacity="0.65" strokeWidth="2" strokeDasharray="6 6" />
-          <circle cx="186" cy="150" r="6" fill={accent} />
-          <circle cx="316" cy="84" r="7" fill={secondary} />
-        </svg>
-      );
-    case "ev":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-85"
-          aria-hidden="true"
-        >
-          <circle cx="180" cy="146" r="96" stroke={accent} strokeOpacity="0.22" strokeWidth="2" />
-          <circle cx="180" cy="146" r="72" stroke={secondary} strokeWidth="3.5" strokeDasharray="290 180" strokeLinecap="round" />
-          <path d="M188 104 L160 150 H184 L172 190 L204 140 H180 L188 104Z" fill={secondary} fillOpacity="0.28" stroke={secondary} strokeWidth="2" strokeLinejoin="round" />
-        </svg>
-      );
-    case "tokens":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-85"
-          aria-hidden="true"
-        >
-          <rect x="86" y="76" width="188" height="40" rx="12" fill={accent} fillOpacity="0.2" stroke={accent} strokeWidth="1.6" />
-          <rect x="86" y="128" width="188" height="40" rx="12" fill={secondary} fillOpacity="0.18" stroke={secondary} strokeWidth="1.6" />
-          <rect x="86" y="180" width="188" height="40" rx="12" stroke="white" strokeOpacity="0.2" strokeWidth="1.5" />
-        </svg>
-      );
-    case "checkout":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-85"
-          aria-hidden="true"
-        >
-          <rect x="96" y="72" width="168" height="148" rx="22" stroke={accent} strokeOpacity="0.45" strokeWidth="2" />
-          <line x1="122" y1="112" x2="238" y2="112" stroke="white" strokeOpacity="0.28" strokeWidth="3" strokeLinecap="round" />
-          <line x1="122" y1="142" x2="204" y2="142" stroke="white" strokeOpacity="0.18" strokeWidth="3" strokeLinecap="round" />
-          <rect x="122" y="170" width="116" height="26" rx="13" fill={secondary} fillOpacity="0.3" stroke={secondary} strokeWidth="1.75" />
-        </svg>
-      );
-    case "dashboard":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-85"
-          aria-hidden="true"
-        >
-          <rect x="72" y="76" width="102" height="72" rx="14" fill={accent} fillOpacity="0.18" stroke={accent} strokeWidth="1.6" />
-          <rect x="186" y="76" width="102" height="72" rx="14" stroke={secondary} strokeOpacity="0.45" strokeWidth="1.6" />
-          <rect x="72" y="160" width="216" height="64" rx="14" stroke="white" strokeOpacity="0.2" strokeWidth="1.5" />
-        </svg>
-      );
-    case "map":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-85"
-          aria-hidden="true"
-        >
-          <path d="M74 196 C122 132, 174 212, 222 146 C248 110, 274 118, 294 98" stroke={accent} strokeWidth="3" strokeDasharray="7 7" strokeLinecap="round" />
-          <circle cx="118" cy="168" r="9" fill={accent} />
-          <circle cx="222" cy="146" r="9" fill={secondary} />
-          <circle cx="294" cy="98" r="7" stroke="white" strokeWidth="2.5" />
-        </svg>
-      );
-    case "vinyl":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-85"
-          aria-hidden="true"
-        >
-          <circle cx="180" cy="146" r="96" stroke="white" strokeOpacity="0.16" strokeWidth="1.5" />
-          <circle cx="180" cy="146" r="74" stroke="white" strokeOpacity="0.14" strokeWidth="1.5" />
-          <circle cx="180" cy="146" r="52" stroke={accent} strokeOpacity="0.5" strokeWidth="2" />
-          <circle cx="180" cy="146" r="22" fill={accent} fillOpacity="0.32" stroke={accent} strokeWidth="2" />
-        </svg>
-      );
-    case "editorial":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-85"
-          aria-hidden="true"
-        >
-          <line x1="88" y1="84" x2="272" y2="84" stroke={accent} strokeWidth="2.5" />
-          <rect x="88" y="104" width="84" height="110" rx="12" fill={secondary} fillOpacity="0.18" stroke={secondary} strokeOpacity="0.45" strokeWidth="1.5" />
-          <line x1="188" y1="116" x2="272" y2="116" stroke="white" strokeOpacity="0.3" strokeWidth="3" />
-          <line x1="188" y1="138" x2="256" y2="138" stroke="white" strokeOpacity="0.2" strokeWidth="3" />
-          <line x1="188" y1="160" x2="266" y2="160" stroke={accent} strokeOpacity="0.55" strokeWidth="3" />
-        </svg>
-      );
-    case "split":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-85"
-          aria-hidden="true"
-        >
-          <rect x="78" y="76" width="114" height="142" rx="18" fill={accent} fillOpacity="0.2" stroke={accent} strokeWidth="1.75" />
-          <rect x="168" y="98" width="114" height="142" rx="18" fill="#0B0F14" fillOpacity="0.85" stroke={secondary} strokeWidth="1.75" />
-        </svg>
-      );
-    case "spatial":
-      return (
-        <svg
-          viewBox="0 0 360 360"
-          fill="none"
-          className="h-full w-full opacity-85"
-          aria-hidden="true"
-        >
-          <path d="M84 204 L180 86 L276 204" stroke={accent} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M118 204 L180 128 L242 204" stroke={secondary} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          <line x1="72" y1="204" x2="288" y2="204" stroke="white" strokeOpacity="0.22" strokeWidth="2" />
-        </svg>
-      );
-  }
-}
-
-function EditorialCardBackdrop({
-  theme,
-  interactive = true,
-}: {
-  theme: NonNullable<CaseStudy["artworkTheme"]>;
-  interactive?: boolean;
-}) {
-  return (
-    <div
-      className={`pointer-events-none absolute inset-0 overflow-hidden bg-[#0B0F14] ${
-        interactive
-          ? "transition-transform duration-700 ease-out group-hover:scale-[1.05]"
-          : ""
-      }`}
-      aria-hidden="true"
-    >
-      {/* Ambient Dual-Tone Studio Glow */}
-      <div
-        className="absolute -top-16 -right-12 h-72 w-72 rounded-full opacity-30 blur-3xl"
-        style={{ backgroundColor: theme.accent }}
-      />
-      <div
-        className="absolute top-20 -left-16 h-64 w-64 rounded-full opacity-20 blur-3xl"
-        style={{ backgroundColor: theme.secondary }}
-      />
-
-      {/* Subtle Architectural Dot Matrix */}
-      <div
-        className="absolute inset-0 opacity-[0.14]"
-        style={{
-          backgroundImage:
-            "radial-gradient(rgba(255,255,255,0.55) 1px, transparent 1px)",
-          backgroundSize: "22px 22px",
-        }}
-      />
-
-      {/* Bespoke Project Vector Motif */}
-      <div className="absolute inset-x-0 top-2 h-[320px]">
-        <MotifVector
-          motif={theme.motif}
-          accent={theme.accent}
-          secondary={theme.secondary}
-        />
-      </div>
-    </div>
-  );
 }
 
 export default function ProjectGrid() {
@@ -422,19 +186,15 @@ export default function ProjectGrid() {
               }}
               className="group relative flex min-h-[450px] flex-col justify-between overflow-hidden rounded-[26px] bg-[#0B0F14] p-6 text-left transition-transform duration-300 hover:-translate-y-1 lg:min-h-[500px] lg:rounded-[28px] lg:p-7"
             >
-              {/* Full-Bleed Photography or Bespoke Editorial Backdrop */}
-              {project.image ? (
-                <Image
-                  src={project.image}
-                  alt={project.imageAlt}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
-                  referrerPolicy="no-referrer"
-                />
-              ) : project.artworkTheme ? (
-                <EditorialCardBackdrop theme={project.artworkTheme} />
-              ) : null}
+              {/* Full-Bleed Editorial Studio Photography */}
+              <Image
+                src={project.image}
+                alt={project.imageAlt}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                referrerPolicy="no-referrer"
+              />
 
               {/* Signature Deep Seamless Bottom Scrim */}
               <div
@@ -555,21 +315,14 @@ export default function ProjectGrid() {
             >
               {/* Top Media Header */}
               <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#10161C]">
-                {selectedProject.image ? (
-                  <Image
-                    src={selectedProject.image}
-                    alt={selectedProject.imageAlt}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 768px"
-                    className="object-cover"
-                    referrerPolicy="no-referrer"
-                  />
-                ) : selectedProject.artworkTheme ? (
-                  <EditorialCardBackdrop
-                    theme={selectedProject.artworkTheme}
-                    interactive={false}
-                  />
-                ) : null}
+                <Image
+                  src={selectedProject.image}
+                  alt={selectedProject.imageAlt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 768px"
+                  className="object-cover"
+                  referrerPolicy="no-referrer"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0F131A]/85 via-[#0F131A]/25 to-transparent" />
 
                 <button
