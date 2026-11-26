@@ -26,9 +26,15 @@ const CCW_SLOTS = [
  */
 const INITIAL_SQUARE_SLOTS = [3, 2, 1] as const;
 
-/** Duration of each individual square's slide animation (seconds / milliseconds). */
-const STEP_DURATION_S = 0.8;
-const STEP_DURATION_MS = STEP_DURATION_S * 1000;
+/**
+ * Perceptual spring timing for each 20px tile slide:
+ * - visualDuration (0.34s): brisk, physical glide into the empty slot
+ * - bounce (0.26): subtle tactile overshoot as the square settles
+ * - STEP_INTERVAL_MS (520ms): lets the tiny bounce settle with a brief rhythmic beat
+ */
+const SLIDE_VISUAL_DURATION_S = 0.34;
+const SLIDE_BOUNCE = 0.26;
+const STEP_INTERVAL_MS = 520;
 
 export default function BrandLogo() {
   const prefersReducedMotion = useReducedMotion();
@@ -39,7 +45,7 @@ export default function BrandLogo() {
 
     const interval = window.setInterval(() => {
       setTick((prev) => prev + 1);
-    }, STEP_DURATION_MS);
+    }, STEP_INTERVAL_MS);
 
     return () => window.clearInterval(interval);
   }, [prefersReducedMotion]);
@@ -68,8 +74,9 @@ export default function BrandLogo() {
               prefersReducedMotion
                 ? { duration: 0 }
                 : {
-                    duration: STEP_DURATION_S,
-                    ease: [0.65, 0, 0.35, 1],
+                    type: "spring",
+                    visualDuration: SLIDE_VISUAL_DURATION_S,
+                    bounce: SLIDE_BOUNCE,
                   }
             }
             className="absolute top-0 left-0 h-4 w-4 rounded-[5px] bg-[#10161C] will-change-transform"
