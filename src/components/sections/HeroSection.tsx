@@ -7,12 +7,17 @@ import {
   ArrowRight,
   ArrowUpRight,
   BarChart3,
+  Coffee,
   Lightbulb,
   Menu,
   Monitor,
   X,
 } from "lucide-react";
-import { heroDisciplines, type WorkCategory } from "@/data/portfolio";
+import {
+  COFFEE_BREAK_URL,
+  heroDisciplines,
+  type WorkCategory,
+} from "@/data/portfolio";
 import BrandLogo from "@/components/BrandLogo";
 
 interface HeroSectionProps {
@@ -63,47 +68,85 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
           </a>
         </div>
 
-        {/* Desktop Minimal Nav with × separators */}
-        <nav
-          aria-label="Primary navigation"
-          className="hidden items-center gap-3.5 text-[14px] font-medium text-[#6B7280] md:flex"
-        >
-          {navItems.map((item, idx) => (
-            <span key={item.href} className="inline-flex items-center gap-3.5">
-              <a
-                href={item.href}
-                className="whitespace-nowrap shrink-0 transition-colors duration-200 hover:text-[#10161C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2CA884]"
-              >
-                {item.label}
-              </a>
-              {idx < navItems.length - 1 && (
-                <span
-                  className="text-[12px] text-[#B8BEC7] select-none"
-                  aria-hidden="true"
+        {/* Desktop Minimal Nav with × separators + Coffee Break Utility Pill */}
+        <div className="hidden items-center gap-6 md:flex">
+          <nav
+            aria-label="Primary navigation"
+            className="flex items-center gap-3.5 text-[14px] font-medium text-[#6B7280]"
+          >
+            {navItems.map((item, idx) => (
+              <span key={item.href} className="inline-flex items-center gap-3.5">
+                <a
+                  href={item.href}
+                  className="whitespace-nowrap shrink-0 transition-colors duration-200 hover:text-[#10161C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2CA884]"
                 >
-                  ×
-                </span>
-              )}
-            </span>
-          ))}
-        </nav>
+                  {item.label}
+                </a>
+                {idx < navItems.length - 1 && (
+                  <span
+                    className="text-[12px] text-[#B8BEC7] select-none"
+                    aria-hidden="true"
+                  >
+                    ×
+                  </span>
+                )}
+              </span>
+            ))}
+          </nav>
 
-        {/* Mobile Menu Button */}
-        <button
-          type="button"
-          onClick={() => setMobileMenuOpen((prev) => !prev)}
-          aria-expanded={mobileMenuOpen}
-          aria-label={
-            mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
-          }
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#E4E1DA] bg-white text-[#10161C] transition-colors hover:bg-[#F2EFEA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] md:hidden"
-        >
-          {mobileMenuOpen ? (
-            <X className="h-5 w-5" />
-          ) : (
-            <Menu className="h-5 w-5" />
-          )}
-        </button>
+          <a
+            href={COFFEE_BREAK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Coffee Break — open interactive mini-games in a new tab"
+            className="group inline-flex min-h-[40px] shrink-0 items-center gap-2 rounded-full border border-[#D8D4CB] bg-white px-4 py-2 text-[13px] font-medium text-[#10161C] whitespace-nowrap transition-all duration-200 hover:border-[#10161C] hover:bg-[#0F171E] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884]"
+          >
+            <Coffee
+              className="h-3.5 w-3.5 text-[#1D7A5E] transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-110 group-hover:text-[#54D6AE]"
+              aria-hidden="true"
+            />
+            <span>Coffee Break</span>
+            <ArrowUpRight
+              className="h-3.5 w-3.5 text-[#6B7280] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white/80"
+              aria-hidden="true"
+            />
+          </a>
+        </div>
+
+        {/* Mobile Actions: Compact Coffee Break Pill + Menu Button */}
+        <div className="flex items-center gap-2 md:hidden">
+          <a
+            href={COFFEE_BREAK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Coffee Break — open interactive mini-games in a new window"
+            className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-[#D8D4CB] bg-white px-3.5 text-[12.5px] font-medium text-[#10161C] whitespace-nowrap transition-colors hover:border-[#10161C] hover:bg-[#F2EFEA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884]"
+          >
+            <Coffee className="h-3.5 w-3.5 text-[#1D7A5E]" aria-hidden="true" />
+            <span className="hidden min-[390px]:inline">Coffee Break</span>
+            <span className="min-[390px]:hidden">Break</span>
+            <ArrowUpRight
+              className="h-3 w-3 text-[#6B7280]"
+              aria-hidden="true"
+            />
+          </a>
+
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            aria-expanded={mobileMenuOpen}
+            aria-label={
+              mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
+            }
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#E4E1DA] bg-white text-[#10161C] transition-colors hover:bg-[#F2EFEA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884]"
+          >
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
+        </div>
       </header>
 
       {/* Mobile Dropdown Navigation */}
@@ -127,6 +170,29 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
                 {item.label}
               </a>
             ))}
+
+            <div className="mt-1 border-t border-[#EAE7E0] pt-2">
+              <a
+                href={COFFEE_BREAK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                aria-label="Coffee Break — open interactive mini-games in a new tab"
+                className="flex items-center justify-between rounded-xl bg-[#FAF8F5] px-4 py-3 text-[15px] font-medium text-[#10161C] transition-colors hover:bg-[#F2EFEA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884]"
+              >
+                <span className="inline-flex items-center gap-2.5">
+                  <Coffee
+                    className="h-4 w-4 text-[#1D7A5E]"
+                    aria-hidden="true"
+                  />
+                  <span>Coffee Break</span>
+                </span>
+                <ArrowUpRight
+                  className="h-4 w-4 text-[#6B7280]"
+                  aria-hidden="true"
+                />
+              </a>
+            </div>
           </motion.nav>
         )}
       </AnimatePresence>

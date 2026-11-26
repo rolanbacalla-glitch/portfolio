@@ -45,20 +45,63 @@ export interface ApproachStep {
   icon: "search" | "target" | "pencil" | "check";
 }
 
+export const COFFEE_BREAK_URL = "https://coffee-break.rolanbacalla.space/";
+export const INITIAL_VISIBLE_PROJECTS = 6;
+
+export type CaseStudyIcon =
+  | "audio"
+  | "headphones"
+  | "compass"
+  | "research"
+  | "layers"
+  | "shield"
+  | "cpu"
+  | "trending"
+  | "zap"
+  | "cart"
+  | "layout"
+  | "map"
+  | "disc"
+  | "briefcase"
+  | "globe"
+  | "car"
+  | "coffee";
+
+export type ArtworkMotif =
+  | "oled"
+  | "chart"
+  | "ev"
+  | "tokens"
+  | "checkout"
+  | "dashboard"
+  | "map"
+  | "vinyl"
+  | "editorial"
+  | "split"
+  | "spatial"
+  | "coffee";
+
 export interface CaseStudy {
   id: string;
   title: string;
   domain: string;
   year: string;
   category: Exclude<WorkCategory, "All">;
-  icon: "audio" | "headphones" | "compass" | "research" | "layers" | "shield";
+  icon: CaseStudyIcon;
   summary: string;
   problem: string;
   role: string;
   outcome: string;
   highlights: string[];
-  image: StaticImageData;
+  metrics?: string[];
+  image?: StaticImageData;
   imageAlt: string;
+  artworkTheme?: {
+    accent: string;
+    secondary: string;
+    motif: ArtworkMotif;
+    badge?: string;
+  };
   liveUrl?: string;
   liveLabel?: string;
 }
@@ -323,6 +366,339 @@ export const caseStudies: CaseStudy[] = [
     imageAlt: "Sculpted dark frosted obsidian glass slabs with soft emerald edge light",
     liveUrl: "https://nest-wallet.rolanbacalla.space/",
     liveLabel: "Open live project",
+  },
+  {
+    id: "cambridge-audio-oled",
+    title: "EVO 150 & CXN Display UI",
+    domain: "Embedded Hardware · Audio UX",
+    year: "2024",
+    category: "Digital Experiences",
+    icon: "cpu",
+    summary:
+      "Unified front-panel OLED/LCD display states across EVO 150, CXN, and EXN hardware streamers with 3-metre living-room legibility.",
+    problem:
+      "Listeners controlling hi-fi streamers via dual-concentric rotary dials needed instant visual clarity from across the room while staying synced with mobile apps.",
+    role: "Lead Product Designer · Embedded Display UI, Companion Sync & UK Listener Research.",
+    outcome:
+      "Achieved 90% task completion and 25% faster Wi-Fi onboarding while cutting source-switching friction by 15%.",
+    metrics: ["90% Task Completion", "+25% Setup Speed", "-15% Source Friction"],
+    highlights: [
+      "Designed 3-metre glanceable OLED typography, dB volume arcs, and rotary input selectors.",
+      "Mapped 3 UK listener archetypes across an 18-screen zero-IP Wi-Fi onboarding flow.",
+      "Synchronised real-time playback and source states between StreamMagic mobile surfaces and physical bezels.",
+    ],
+    imageAlt: "Warm gold and cobalt rotary hi-fi OLED display geometry",
+    artworkTheme: {
+      accent: "#D4A359",
+      secondary: "#60A5FA",
+      motif: "oled",
+      badge: "Hardware + Mobile",
+    },
+  },
+  {
+    id: "coffee-break-hub",
+    title: "Coffee Break",
+    domain: "Interactive Web · Daily Rituals",
+    year: "2026",
+    category: "Digital Experiences",
+    icon: "coffee",
+    summary:
+      "A calm collection of 3-minute daily browser puzzles — Loom & Latch, Daily Pour, and Chroma Calm — crafted for restorative focus breaks.",
+    problem:
+      "Short workday breaks often get lost to endless social scrolling or high-stress mobile games that tax executive attention rather than restoring it.",
+    role: "End-to-end game UX, Antigravity v3.0 token architecture, spring motion, and procedural Web Audio.",
+    outcome:
+      "Delivered three deterministic daily-seeded games with zero accounts, procedural tactile soundscapes, and a clean one-round stopping point.",
+    metrics: ["3 Live Games", "Web Audio Synth", "Zero-Backend Daily Seed"],
+    highlights: [
+      "Engineered magnetic tile-latching (Loom & Latch), spiral V60 brewing (Daily Pour), and OKLCH colour harmony (Chroma Calm).",
+      "Synthesised ceramic clicks, pentatonic chimes, and filtered kettle water streams purely via the Web Audio API.",
+      "Built dual Alabaster Light and Obsidian Dark themes with full keyboard and mobile touch support.",
+    ],
+    imageAlt: "Tactile geometric puzzle tiles and concentric pour-over rings",
+    artworkTheme: {
+      accent: "#54D6AE",
+      secondary: "#C8BFFF",
+      motif: "coffee",
+      badge: "Playable Hub",
+    },
+    liveUrl: COFFEE_BREAK_URL,
+    liveLabel: "Play Coffee Break",
+  },
+  {
+    id: "apex-strategist",
+    title: "Apex Strategist",
+    domain: "FinTech · Portfolio & Risk UX",
+    year: "2025",
+    category: "Product Strategy",
+    icon: "trending",
+    summary:
+      "Rules-based mobile portfolio experience replacing exchange clutter with Trade Advisor guardrails, allocation rules, and risk alerts.",
+    problem:
+      "Retail investors managing volatile portfolios struggle with noisy candlestick charts, emotional trades, and unclear portfolio drift.",
+    role: "Lead Product Designer · Product Strategy, Information Architecture & 12-Screen Mobile UI.",
+    outcome:
+      "Drove a 25% lift in feature adoption, 40% reduction in rebalancing friction, and an 8.5/10 user trust score.",
+    metrics: ["+25% Adoption", "-40% Friction", "8.5/10 UX Trust"],
+    highlights: [
+      "Surfaced tabular GBP balances and drift health scores without overwhelming chart noise.",
+      "Created plain-English Trade Advisor guardrails with pre-trade risk previews.",
+      "Designed one-tap automated rebalance rules and calm threshold alerts.",
+    ],
+    imageAlt: "Indigo and emerald telemetry curves over dark obsidian cards",
+    artworkTheme: {
+      accent: "#818CF8",
+      secondary: "#34D399",
+      motif: "chart",
+      badge: "12 Mobile Screens",
+    },
+  },
+  {
+    id: "smartcharge-ev",
+    title: "SmartCharge EV",
+    domain: "CleanTech · Mobile & SaaS",
+    year: "2025",
+    category: "Digital Experiences",
+    icon: "zap",
+    summary:
+      "Cross-platform home EV charging ecosystem pairing departure-time mobile scheduling with a desktop kWh analytics and tariff workspace.",
+    problem:
+      "EV drivers and fleet households lacked a unified way to automate off-peak overnight charging alongside transparent household energy billing.",
+    role: "Senior Product Designer · Cross-Platform UX, Tariff Flows & Responsive SaaS UI.",
+    outcome:
+      "Unified 8 mobile companion screens and 3 desktop SaaS billing views around effortless off-peak automation.",
+    metrics: ["11 Synced Screens", "Off-Peak Automation", "Mobile + SaaS"],
+    highlights: [
+      "Designed departure-ready mobile charge scheduling optimised around UK off-peak energy windows.",
+      "Built a desktop SaaS workspace tracking kWh consumption, tariff savings, and charger telemetry.",
+      "Maintained cohesive tokenised components across light-mode SaaS tables and mobile controls.",
+    ],
+    imageAlt: "Cobalt and emerald concentric energy charge rings",
+    artworkTheme: {
+      accent: "#3B82F6",
+      secondary: "#10B981",
+      motif: "ev",
+      badge: "Mobile + Desktop SaaS",
+    },
+  },
+  {
+    id: "token-architecture-spec",
+    title: "Multi-Platform Token Library",
+    domain: "Design Systems · WCAG 2.2 AA",
+    year: "2025",
+    category: "Design Systems",
+    icon: "layers",
+    summary:
+      "End-to-end 3-tier W3C DTCG token specification governing semantic surfaces, typography, interactive states, and Figma-to-code parity.",
+    problem:
+      "Cross-platform teams shipping web and mobile apps simultaneously needed a single source of truth for light/dark polarity and accessible contrast.",
+    role: "Principal Design Systems Designer · Token Architecture & Engineering Hand-Off.",
+    outcome:
+      "Established 100% light and dark mode token parity with automated WCAG 2.2 AA contrast guardrails.",
+    metrics: ["3-Tier Tokens", "Light & Dark Parity", "WCAG 2.2 AA"],
+    highlights: [
+      "Structured primitive, semantic, and component-scoped CSS/JSON tokens across surfaces and actions.",
+      "Specified focus-visible rings, target-size minimums, and reduced-motion fallbacks across every primitive.",
+      "Aligned Figma Variables directly with production Tailwind CSS v4 custom properties.",
+    ],
+    imageAlt: "Layered emerald and cobalt design token matrix",
+    artworkTheme: {
+      accent: "#2CA884",
+      secondary: "#3B82F6",
+      motif: "tokens",
+      badge: "3-Tier Spec",
+    },
+    liveUrl: "https://design-system.rolanbacalla.space/",
+    liveLabel: "Inspect system",
+  },
+  {
+    id: "checkout-flow",
+    title: "Checkout Flow Optimisation",
+    domain: "E-Commerce · Conversion UX",
+    year: "2024",
+    category: "Product Strategy",
+    icon: "cart",
+    summary:
+      "Streamlined 7-screen mobile checkout reducing form friction through progressive disclosure, clear delivery tiers, and high-trust payment review.",
+    problem:
+      "Mobile shoppers were abandoning baskets mid-checkout due to long single-page forms, late delivery-fee surprises, and ambiguous error states.",
+    role: "Product Designer · Conversion Optimisation, Form UX & Mobile Prototyping.",
+    outcome:
+      "Delivered a focused 7-step mobile flow with upfront shipping clarity and inline validation.",
+    highlights: [
+      "Broke dense address and payment inputs into calm, thumb-friendly progressive steps.",
+      "Surfaced delivery dates and total GBP cost breakdowns early to eliminate basket shock.",
+      "Designed unmistakable inline field recovery and high-trust order confirmation states.",
+    ],
+    imageAlt: "Crisp stepped conversion funnel and payment confirmation geometry",
+    artworkTheme: {
+      accent: "#38BDF8",
+      secondary: "#10B981",
+      motif: "checkout",
+      badge: "7-Screen Flow",
+    },
+  },
+  {
+    id: "atom-atelier-dashboards",
+    title: "Atom Ledger & Atelier",
+    domain: "Enterprise SaaS · Data Vis",
+    year: "2025",
+    category: "Design Systems",
+    icon: "layout",
+    summary:
+      "High-density fintech and executive SaaS dashboards exploring dark card telemetry, multi-currency ledgers, and modular widget grids.",
+    problem:
+      "Finance and operations leads needed dense real-time KPI visibility without sacrificing typographic hierarchy or scan speed.",
+    role: "Product Designer · Data Visualisation, Table Ergonomics & Dark UI Craft.",
+    outcome:
+      "Created 5 modular dashboard explorations balancing tabular precision with calm visual hierarchy.",
+    highlights: [
+      "Applied strict `tabular-nums` alignment and semantic status badges across high-row-count ledgers.",
+      "Designed responsive bento telemetry cards with clear primary vs secondary metric contrast.",
+      "Standardised dark-mode surface elevation steps to separate filters, canvas, and drawers cleanly.",
+    ],
+    imageAlt: "Panoramic dark SaaS bento telemetry grid",
+    artworkTheme: {
+      accent: "#10B981",
+      secondary: "#60A5FA",
+      motif: "dashboard",
+      badge: "5 SaaS Explorations",
+    },
+  },
+  {
+    id: "roam-together",
+    title: "Roam Together",
+    domain: "Consumer Mobile · Social Maps",
+    year: "2024",
+    category: "Digital Experiences",
+    icon: "map",
+    summary:
+      "Collaborative mobile travel app combining curated destination cards, shared group voting, and interactive route maps.",
+    problem:
+      "Friends co-planning weekend city breaks struggled to reconcile saved pins and group preferences inside a single mobile view.",
+    role: "Product Designer · Mobile UX/UI, Map Overlay Ergonomics & Visual Direction.",
+    outcome:
+      "Crafted a warm, tactile mobile showcase uniting map exploration and shared itinerary cards.",
+    highlights: [
+      "Paired split-sheet map views with swipeable destination cards for effortless one-handed browsing.",
+      "Designed lightweight group voting chips so travellers converge on activities quickly.",
+      "Used a warm terracotta-and-amber accent system to evoke sunlit editorial travel guides.",
+    ],
+    imageAlt: "Warm terracotta route pins and topographic map contours",
+    artworkTheme: {
+      accent: "#F97316",
+      secondary: "#FBBF24",
+      motif: "map",
+      badge: "Mobile + Maps",
+    },
+  },
+  {
+    id: "lyssnup-player",
+    title: "LyssnUP Music Player",
+    domain: "Desktop & Tablet · Audio UI",
+    year: "2024",
+    category: "Digital Experiences",
+    icon: "disc",
+    summary:
+      "Dual-mode desktop and tablet music streaming player rendered in obsidian dark and studio-grey themes with tactile playback controls.",
+    problem:
+      "Desktop streaming apps often feel like cluttered web wrappers rather than dedicated, album-art-forward listening instruments.",
+    role: "Product Designer · Audio UI Exploration, Dual-Theme Craft & Spatial Layout.",
+    outcome:
+      "Designed a responsive widescreen player celebrating cover art, queue clarity, and tactile transport controls.",
+    highlights: [
+      "Crafted a smooth album cover-flow stage paired with lossless audio quality telemetry.",
+      "Balanced obsidian dark and warm studio-grey themes with warm orange hardware-inspired accents.",
+      "Optimised touch targets for tablet bedside/desk stands alongside desktop keyboard shortcuts.",
+    ],
+    imageAlt: "Obsidian vinyl grooves and warm studio-orange waveform bars",
+    artworkTheme: {
+      accent: "#FB923C",
+      secondary: "#A1A1AA",
+      motif: "vinyl",
+      badge: "Dual-Mode Player",
+    },
+  },
+  {
+    id: "cody-philips",
+    title: "Cody.Philips Executive",
+    domain: "Web & Editorial · Brand UX",
+    year: "2024",
+    category: "Product Strategy",
+    icon: "briefcase",
+    summary:
+      "Multi-page executive recruitment website pairing authoritative editorial typography with deep royal purple and warm gold accents.",
+    problem:
+      "Boutique C-suite search firms frequently blend into generic corporate templates that fail to convey discretion and senior-level authority.",
+    role: "Lead Web & Brand Designer · Information Architecture, Editorial Direction & Web UI.",
+    outcome:
+      "Established a distinctive multi-page web presence positioned around 'Refined Talent Architecture'.",
+    highlights: [
+      "Structured clear journeys for both board-level hiring clients and confidential executive candidates.",
+      "Paired high-contrast editorial headings with disciplined grid spacing and warm gold rules.",
+      "Designed responsive practice-area index pages and partner profile templates.",
+    ],
+    imageAlt: "Editorial architectural columns in deep violet and warm gold",
+    artworkTheme: {
+      accent: "#F59E0B",
+      secondary: "#A78BFA",
+      motif: "editorial",
+      badge: "Multi-Page Web",
+    },
+  },
+  {
+    id: "wealth-saas-landings",
+    title: "Wealth & SaaS Platforms",
+    domain: "Marketing Web · Storytelling",
+    year: "2024",
+    category: "Product Strategy",
+    icon: "globe",
+    summary:
+      "Full-length conversion landing pages contrasting a dark private-wealth platform with a crisp light-mode B2B SaaS product launch.",
+    problem:
+      "Complex financial and B2B software products lose prospective buyers above the fold when value propositions and product proof lack narrative pacing.",
+    role: "Web Designer · Conversion Storytelling, Visual Hierarchy & Interactive Sections.",
+    outcome:
+      "Delivered two contrasting full-page web systems tailored to high-net-worth trust and SaaS trial conversion.",
+    highlights: [
+      "Paced hero proof, interactive product callouts, security trust markers, and pricing clarity.",
+      "Explored dark obsidian wealth aesthetics ('Command your financial universe') vs crisp editorial light SaaS.",
+      "Engineered modular section rhythm that collapses cleanly onto single-column mobile viewports.",
+    ],
+    imageAlt: "Contrasting indigo and cobalt conversion layout planes",
+    artworkTheme: {
+      accent: "#818CF8",
+      secondary: "#38BDF8",
+      motif: "split",
+      badge: "Conversion Web",
+    },
+  },
+  {
+    id: "hozah-brand-spatial",
+    title: "Hozah Brand & Spatial",
+    domain: "Mobility · Identity & Spatial",
+    year: "2024",
+    category: "Design Systems",
+    icon: "car",
+    summary:
+      "Complete brand and spatial identity ('Drive in. Park. Walk away.') spanning web design, ANPR car-park signage, exhibition booths, and print.",
+    problem:
+      "Drivers encountering automated ticketless parking needed immediate, high-trust visual reassurance both on physical signage and online.",
+    role: "Brand & Identity Designer · Logo Systems, Web Language & Physical Wayfinding.",
+    outcome:
+      "Unified digital touchpoints, large-format exhibition spaces, and collateral under a vibrant teal-and-lime identity.",
+    highlights: [
+      "Developed 3 logo explorations, brand guidelines, and the Hozah web visual language.",
+      "Designed high-legibility outdoor wayfinding, exhibition booth graphics, and print collateral.",
+      "Maintained unmistakable colour and typographic consistency from mobile screens to 4-metre booth walls.",
+    ],
+    imageAlt: "Teal and lime spatial wayfinding arcs and architectural grid",
+    artworkTheme: {
+      accent: "#2DD4BF",
+      secondary: "#A3E635",
+      motif: "spatial",
+      badge: "Identity + Spatial",
+    },
   },
 ];
 
