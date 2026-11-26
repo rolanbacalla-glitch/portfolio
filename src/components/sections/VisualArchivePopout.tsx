@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -315,6 +315,7 @@ export default function VisualArchivePopout({
   onClose,
   initialPillar = "All",
 }: VisualArchivePopoutProps) {
+  const prefersReducedMotion = useReducedMotion();
   const [activePillar, setActivePillar] = useState<PopoutPillar>(initialPillar);
   const [selectedWork, setSelectedWork] = useState<PopoutWorkItem | null>(null);
   const [stageMode, setStageMode] = useState<"auto" | "dark" | "light">("auto");
@@ -666,21 +667,46 @@ export default function VisualArchivePopout({
                         </h3>
                       </div>
 
-                      <div className="inline-flex rounded-full border border-[#D8D4CB] bg-[#FAF8F5] p-1">
-                        {(["auto", "light", "dark"] as const).map((mode) => (
-                          <button
-                            key={mode}
-                            type="button"
-                            onClick={() => setStageMode(mode)}
-                            className={`min-h-[32px] cursor-pointer rounded-full px-3 text-xs font-semibold capitalize transition-colors ${
-                              stageMode === mode
-                                ? "bg-[#0F171E] text-white"
-                                : "text-[#6B7280] hover:text-[#10161C]"
-                            }`}
-                          >
-                            {mode}
-                          </button>
-                        ))}
+                      <div
+                        role="radiogroup"
+                        aria-label="Stage viewer theme"
+                        className="relative inline-flex rounded-full border border-[#D8D4CB] bg-[#FAF8F5] p-1"
+                      >
+                        {(["auto", "light", "dark"] as const).map((mode) => {
+                          const isSelected = stageMode === mode;
+                          return (
+                            <button
+                              key={mode}
+                              type="button"
+                              role="radio"
+                              aria-checked={isSelected}
+                              onClick={() => setStageMode(mode)}
+                              className={`relative min-h-[32px] cursor-pointer rounded-full px-3 text-xs font-semibold capitalize transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] ${
+                                isSelected
+                                  ? "text-white"
+                                  : "text-[#6B7280] hover:text-[#10161C]"
+                              }`}
+                            >
+                              {isSelected && (
+                                <motion.span
+                                  layoutId="stage-mode-active-pill"
+                                  transition={
+                                    prefersReducedMotion
+                                      ? { duration: 0 }
+                                      : {
+                                          type: "spring",
+                                          visualDuration: 0.25,
+                                          bounce: 0.18,
+                                        }
+                                  }
+                                  className="absolute inset-0 rounded-full bg-[#0F171E]"
+                                  aria-hidden="true"
+                                />
+                              )}
+                              <span className="relative z-10">{mode}</span>
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
 
