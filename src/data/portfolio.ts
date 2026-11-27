@@ -390,7 +390,7 @@ export const caseStudies: CaseStudy[] = [
     category: "Digital Experiences",
     icon: "coffee",
     summary:
-      "A calm collection of 3-minute daily browser puzzles — Loom & Latch, Daily Pour, and Chroma Calm — crafted for restorative focus breaks.",
+      "A calm collection of 3-minute daily browser puzzles — Loom & Latch, Connect 4, and Chroma Calm — crafted for restorative focus breaks.",
     problem:
       "Short workday breaks often get lost to endless social scrolling or high-stress mobile games that tax executive attention rather than restoring it.",
     role: "End-to-end game UX, Antigravity v3.0 token architecture, spring motion, and procedural Web Audio.",
@@ -398,8 +398,8 @@ export const caseStudies: CaseStudy[] = [
       "Delivered three deterministic daily-seeded games with zero accounts, procedural tactile soundscapes, and a clean one-round stopping point.",
     metrics: ["3 Live Games", "Web Audio Synth", "Zero-Backend Daily Seed"],
     highlights: [
-      "Engineered magnetic tile-latching (Loom & Latch), spiral V60 brewing (Daily Pour), and OKLCH colour harmony (Chroma Calm).",
-      "Synthesised ceramic clicks, pentatonic chimes, and filtered kettle water streams purely via the Web Audio API.",
+      "Engineered magnetic tile-latching (Loom & Latch), tactile strategic disc-dropping (Connect 4), and OKLCH colour harmony (Chroma Calm).",
+      "Synthesised ceramic clicks, weighted wooden disc drops, and pentatonic chimes purely via the Web Audio API.",
       "Built dual Alabaster Light and Obsidian Dark themes with full keyboard and mobile touch support.",
     ],
     image: caseCoffeeBreakHubImg,
