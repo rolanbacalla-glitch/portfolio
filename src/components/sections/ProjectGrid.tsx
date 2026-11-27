@@ -32,6 +32,7 @@ import {
   INITIAL_VISIBLE_PROJECTS,
   type CaseStudy,
 } from "@/data/portfolio";
+import ExpandableCardDescription from "@/components/sections/ExpandableCardDescription";
 
 function ProjectIcon({ type }: { type: CaseStudy["icon"] }) {
   const cls = "h-[22px] w-[22px]";
@@ -76,9 +77,17 @@ function ProjectIcon({ type }: { type: CaseStudy["icon"] }) {
 export default function ProjectGrid() {
   const prefersReducedMotion = useReducedMotion();
   const [selectedProject, setSelectedProject] = useState<CaseStudy | null>(null);
+  const [expandedCardIds, setExpandedCardIds] = useState<Record<string, boolean>>({});
   const [showAll, setShowAll] = useState(false);
   const toggleAnchorRef = useRef<HTMLDivElement | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
+
+  const toggleCardDescription = (projectId: string) => {
+    setExpandedCardIds((prev) => ({
+      ...prev,
+      [projectId]: !prev[projectId],
+    }));
+  };
 
   const visibleProjects = showAll
     ? caseStudies
@@ -159,6 +168,7 @@ export default function ProjectGrid() {
       >
         {visibleProjects.map((project, index) => {
           const isExtraCard = index >= INITIAL_VISIBLE_PROJECTS;
+          const isDescriptionExpanded = Boolean(expandedCardIds[project.id]);
 
           return (
             <motion.article
@@ -196,9 +206,13 @@ export default function ProjectGrid() {
                 referrerPolicy="no-referrer"
               />
 
-              {/* Signature Deep Seamless Bottom Scrim */}
+              {/* Signature Deep Seamless Bottom Scrim (deepens cleanly when description expands) */}
               <div
-                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#05080B] via-[#05080B]/75 via-42% to-transparent"
+                className={`pointer-events-none absolute inset-0 transition-opacity duration-300 ${
+                  isDescriptionExpanded
+                    ? "bg-gradient-to-t from-[#05080B] via-[#05080B]/88 via-58% to-[#05080B]/20"
+                    : "bg-gradient-to-t from-[#05080B] via-[#05080B]/75 via-42% to-transparent"
+                }`}
                 aria-hidden="true"
               />
 
@@ -234,7 +248,7 @@ export default function ProjectGrid() {
               </div>
 
               {/* Bottom Content matching the Drafted Card Typography & Rhythm */}
-              <div className="relative z-20 mt-auto pt-28 pointer-events-none">
+              <div className="relative z-20 mt-auto pt-20 pointer-events-none">
                 <p className="text-[12px] font-medium text-white/65 tabular-nums">
                   {project.domain} · {project.year}
                 </p>
@@ -243,11 +257,14 @@ export default function ProjectGrid() {
                   {project.title}
                 </h3>
 
-                <p className="mt-2.5 text-[14px] leading-[1.5] text-white/80">
-                  {project.summary}
-                </p>
+                <ExpandableCardDescription
+                  text={project.summary}
+                  projectTitle={project.title}
+                  isExpanded={isDescriptionExpanded}
+                  onToggle={() => toggleCardDescription(project.id)}
+                />
 
-                <div className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#54D6AE] transition-colors group-hover:text-white">
+                <div className="mt-3.5 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#54D6AE] transition-colors group-hover:text-white">
                   <span>View case study</span>
                   <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1" />
                 </div>
