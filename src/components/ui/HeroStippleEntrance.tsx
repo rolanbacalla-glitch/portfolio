@@ -119,7 +119,7 @@ function buildParticles(
       driftVx: speed * 0.82,
       driftVy: -speed * 0.52,
       swayPhase: rand() * Math.PI * 2,
-      radius: 1.0 + rand() * 1.1,
+      radius: 0.65 + rand() * 0.65,
       delay: rand() * 0.14,
       isAccent: rand() < 0.2,
       alphaScale: 0.74 + rand() * 0.26,
