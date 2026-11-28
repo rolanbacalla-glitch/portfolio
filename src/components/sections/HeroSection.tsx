@@ -9,6 +9,7 @@ import {
 import BrandLogo from "@/components/BrandLogo";
 import ThemeToggle from "@/components/ThemeToggle";
 import HeroDisciplineCard from "@/components/sections/HeroDisciplineCard";
+import HeroStippleEntrance from "@/components/ui/HeroStippleEntrance";
 
 interface HeroSectionProps {
   onSelectDiscipline: (category: Exclude<WorkCategory, "All">) => void;
@@ -20,8 +21,11 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
       id="top"
       className="relative overflow-hidden rounded-[28px] bg-[#FAF8F5] px-6 py-7 text-[#10161C] shadow-[0_1px_3px_rgba(16,22,28,0.04)] transition-colors duration-200 dark:border dark:border-white/[0.07] dark:bg-[#11161F] dark:text-[#F4F6F9] dark:shadow-none sm:px-10 sm:py-10 lg:rounded-[36px] lg:px-14 lg:py-12"
     >
+      {/* Mercury-inspired one-shot stipple entrance backdrop */}
+      <HeroStippleEntrance />
+
       {/* Top Bar inside Sheet 01 */}
-      <header className="mb-10 flex items-center justify-between gap-4 sm:gap-6 lg:mb-12">
+      <header className="relative z-10 mb-10 flex items-center justify-between gap-4 sm:gap-6 lg:mb-12">
         {/* Brand Mark + Name Lockup */}
         <div className="inline-flex shrink-0 items-center gap-3.5">
           <BrandLogo />
@@ -66,7 +70,7 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
       </header>
 
       {/* Hero Split Content */}
-      <div className="grid grid-cols-1 items-stretch gap-10 lg:grid-cols-12 lg:gap-8">
+      <div className="relative z-10 grid grid-cols-1 items-stretch gap-10 lg:grid-cols-12 lg:gap-8">
         {/* Left Editorial Column — Your Hero Content in the New Layout */}
         <div className="flex flex-col justify-center py-2 lg:col-span-5 lg:pr-4">
           <div>
