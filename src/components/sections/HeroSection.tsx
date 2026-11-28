@@ -118,9 +118,9 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
           </div>
         </div>
 
-        {/* Mobile Actions: Compact Theme Switch + Coffee Break Pill + Menu Button */}
+        {/* Mobile Actions: Theme Switch + Coffee Break Pill + Menu Button */}
         <div className="flex items-center gap-2 md:hidden">
-          <ThemeToggle compact />
+          <ThemeToggle />
 
           <a
             href={COFFEE_BREAK_URL}
