@@ -10,7 +10,7 @@ import caseMelomaniaImg from "@/assets/images/case_melomania_1795370163141.jpg";
 import caseTravelKinImg from "@/assets/images/case_travel_kin_1795370238144.jpg";
 import caseLyndaPlusImg from "@/assets/images/case_lynda_plus_1795370180138.jpg";
 import caseDesignSystemsImg from "@/assets/images/case_design_systems_1795370237571.jpg";
-import caseFootballInsightsImg from "@/assets/images/case_football_insights.png";
+import caseFootballInsightsImg from "@/assets/images/case_football_insights_pro.jpg";
 import caseNestWalletImg from "@/assets/images/case_nest_wallet_1795370175156.jpg";
 import caseCambridgeAudioOledImg from "@/assets/images/case_cambridge_audio_oled_1795704500782.jpg";
 import caseCoffeeBreakHubImg from "@/assets/images/case_coffee_break_hub_1795704509585.jpg";
