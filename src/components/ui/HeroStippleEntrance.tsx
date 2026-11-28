@@ -51,9 +51,9 @@ const DESKTOP_ENTRANCE_TOTAL = 960;
 const MOBILE_AMBIENT_COUNT = 140;
 const MOBILE_ENTRANCE_TOTAL = 280;
 const MAX_DPR = 2;
-const GATHER_DURATION_MS = 900;
-const HOLD_DURATION_MS = 180;
-const ENTRANCE_DURATION_MS = 2550;
+const GATHER_DURATION_MS = 4500;
+const HOLD_DURATION_MS = 800;
+const ENTRANCE_DURATION_MS = 10000;
 const CURSOR_RADIUS = 145;
 const MAX_MAGNETISED = 34;
 
@@ -72,8 +72,8 @@ function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-function easeOutExpo(t: number): number {
-  return t >= 1 ? 1 : 1 - Math.pow(2, -9 * t);
+function easeOutCubic(t: number): number {
+  return 1 - Math.pow(1 - t, 3);
 }
 
 function clamp01(value: number): number {
@@ -116,8 +116,8 @@ function buildParticles(
     const endX = entranceOnly ? rand() : clamp01((col + 0.14 + rand() * 0.72) / cols);
     const endY = entranceOnly ? rand() : clamp01((row + 0.14 + rand() * 0.72) / rows);
 
-    // Calm bottom-left → top-right ambient drift (px per second)
-    const speed = 7 + rand() * 11;
+    // Calm, unhurried bottom-left → top-right ambient drift (px per second)
+    const speed = 4 + rand() * 6;
 
     particles.push({
       startX,
@@ -355,31 +355,31 @@ export default function HeroStippleEntrance() {
           const endX = p.endX * width;
           const endY = p.endY * height;
 
-          const staggeredMs = Math.max(0, elapsedEntranceMs - p.delay * 420);
+          const staggeredMs = Math.max(0, elapsedEntranceMs - p.delay * 1200);
 
           if (staggeredMs <= GATHER_DURATION_MS) {
-            // Phase 1: Feathered diagonal swath gathers into the headline ring
+            // Phase 1 (0:00–0:04.5): Feathered diagonal swath drifts inward into the headline ring
             const t = easeInOutCubic(clamp01(staggeredMs / GATHER_DURATION_MS));
             drawX = startX + (ringX - startX) * t;
             drawY = startY + (ringY - startY) * t;
             baseOpacity = 0.08 + (palette.peakOpacity - 0.08) * t;
             safeZoneBlend = 0.15;
           } else if (staggeredMs <= burstStartMs) {
-            // Micro-hold: slight inward compression right before radial explosion
+            // Poised hold (~0:04.5–0:05.3): gentle inward breath before radial diffusion
             const holdT = clamp01((staggeredMs - GATHER_DURATION_MS) / HOLD_DURATION_MS);
-            const squeeze = 1 - Math.sin(holdT * Math.PI) * 0.06;
+            const squeeze = 1 - Math.sin(holdT * Math.PI) * 0.045;
             drawX = ringCenterX + (ringX - ringCenterX) * squeeze;
             drawY = ringCenterY + (ringY - ringCenterY) * squeeze;
             baseOpacity = palette.peakOpacity;
             safeZoneBlend = 0.15;
           } else {
-            // Phase 2: Radial explosion outward in all directions to settled positions
+            // Phase 2 (~0:05.3–0:10.0): Smooth, unhurried radial expansion into ambient field
             const rawT = clamp01((staggeredMs - burstStartMs) / burstWindowMs);
-            const t = easeOutExpo(rawT);
+            const t = easeOutCubic(rawT);
 
-            // Brief outward radial kick along ringAngle that peaks early then blends into target
+            // Soft outward radial bloom along ringAngle as the cloud expands
             const burstEnvelope = Math.sin(rawT * Math.PI) * (1 - rawT * 0.45);
-            const burstKick = burstEnvelope * ringBaseRadius * 0.65 * p.burstFactor;
+            const burstKick = burstEnvelope * ringBaseRadius * 0.48 * p.burstFactor;
             const kickX = Math.cos(p.ringAngle) * burstKick;
             const kickY = Math.sin(p.ringAngle) * burstKick;
 
