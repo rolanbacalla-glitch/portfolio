@@ -96,8 +96,6 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
           </nav>
 
           <div className="flex items-center gap-2.5">
-            <ThemeToggle />
-
             <a
               href={COFFEE_BREAK_URL}
               target="_blank"
@@ -115,13 +113,13 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
                 aria-hidden="true"
               />
             </a>
+
+            <ThemeToggle />
           </div>
         </div>
 
-        {/* Mobile Actions: Theme Switch + Coffee Break Pill + Menu Button */}
+        {/* Mobile Actions: Coffee Break Pill + Theme Switch + Menu Button */}
         <div className="flex items-center gap-2 md:hidden">
-          <ThemeToggle />
-
           <a
             href={COFFEE_BREAK_URL}
             target="_blank"
@@ -140,6 +138,8 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
               aria-hidden="true"
             />
           </a>
+
+          <ThemeToggle />
 
           <button
             type="button"

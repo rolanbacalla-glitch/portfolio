@@ -24,10 +24,6 @@ import caseCodyPhilipsImg from "@/assets/images/case_cody_philips_1795704499592.
 import caseWealthSaasLandingsImg from "@/assets/images/case_wealth_saas_landings_1795704509156.jpg";
 import caseHozahBrandSpatialImg from "@/assets/images/case_hozah_brand_spatial_1795704518520.jpg";
 
-import avatarLead1 from "@/assets/images/avatar_lead_1_1795370247707.jpg";
-import avatarLead2 from "@/assets/images/avatar_lead_2_1795370156756.jpg";
-import avatarLead3 from "@/assets/images/avatar_lead_3_1795370209878.jpg";
-
 export type WorkCategory =
   | "All"
   | "Product Strategy"
@@ -103,12 +99,6 @@ export interface ExpertisePillar {
   description: string;
   focus: string;
 }
-
-export const collaboratorAvatars = [
-  { src: avatarLead1, alt: "Product lead collaborator" },
-  { src: avatarLead2, alt: "Design director collaborator" },
-  { src: avatarLead3, alt: "Engineering lead collaborator" },
-];
 
 export const designerPortrait = {
   src: approachProductCraftImg,
