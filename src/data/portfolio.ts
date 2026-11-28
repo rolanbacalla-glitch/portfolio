@@ -10,6 +10,7 @@ import caseMelomaniaImg from "@/assets/images/case_melomania_1795370163141.jpg";
 import caseTravelKinImg from "@/assets/images/case_travel_kin_1795370238144.jpg";
 import caseLyndaPlusImg from "@/assets/images/case_lynda_plus_1795370180138.jpg";
 import caseDesignSystemsImg from "@/assets/images/case_design_systems_1795370237571.jpg";
+import caseFootballInsightsImg from "@/assets/images/case_football_insights.png";
 import caseNestWalletImg from "@/assets/images/case_nest_wallet_1795370175156.jpg";
 import caseCambridgeAudioOledImg from "@/assets/images/case_cambridge_audio_oled_1795704500782.jpg";
 import caseCoffeeBreakHubImg from "@/assets/images/case_coffee_break_hub_1795704509585.jpg";
@@ -286,30 +287,6 @@ export const caseStudies: CaseStudy[] = [
     liveLabel: "Open live project",
   },
   {
-    id: "lynda-plus",
-    title: "Lynda Plus",
-    domain: "UX Research · Product Concept",
-    year: "2025",
-    category: "Product Strategy",
-    icon: "research",
-    summary:
-      "An insight synthesis workspace helping product teams turn qualitative research sessions into structured, actionable decisions faster.",
-    problem:
-      "UX researchers and product managers spend hours tagging transcripts and clustering notes before stakeholders can act on findings.",
-    role: "Product strategy, UX architecture, research workflow design, and interface craft.",
-    outcome:
-      "Streamlined synthesis from raw session notes to prioritised themes with transparent source traceability.",
-    highlights: [
-      "Structured side-by-side transcript evidence and thematic clustering for fast verification.",
-      "Designed scannable research briefs tailored for hiring managers and product stakeholders.",
-      "Balanced dense analytical workflows with generous breathing room and clear typographic rhythm.",
-    ],
-    image: caseLyndaPlusImg,
-    imageAlt: "Minimalist London UX studio desk with research synthesis display",
-    liveUrl: "https://lynda.rolanbacalla.online/",
-    liveLabel: "Open live project",
-  },
-  {
     id: "design-systems",
     title: "Design Systems Foundations",
     domain: "Systems · UI Foundations",
@@ -332,6 +309,54 @@ export const caseStudies: CaseStudy[] = [
     imageAlt: "Modular geometric ceramic and frosted glass design system blocks",
     liveUrl: "https://design.rolanbacalla.online/",
     liveLabel: "Inspect system",
+  },
+  {
+    id: "football-insights",
+    title: "Football Insights",
+    domain: "Sports Tech · Tactical Analytics",
+    year: "2025",
+    category: "Product Strategy",
+    icon: "trending",
+    summary:
+      "Live tactical intelligence engine delivering Premier League pass networks, player recruitment metrics, and interactive match visualisations.",
+    problem:
+      "Supporters and tactical analysts face clunky, fragmented statistics dashboards that fail to convey spatial pitch dynamics and match momentum clearly.",
+    role: "Product strategy, data visualisation UX, tactical pitch modeling, and dark-theme interface craft.",
+    outcome:
+      "Synthesised complex Opta event telemetry into intuitive shot maps, pitch territorial heatmaps, and clean comparative scouting cards.",
+    highlights: [
+      "Designed high-density tactical pitch maps with responsive SVG coordinates and fluid pass network vectors.",
+      "Engineered scannable player comparison radars and recruitment cards with instant metric context.",
+      "Architected a focused dark tactical interface optimised for high visual contrast during live match scrutiny.",
+    ],
+    image: caseFootballInsightsImg,
+    imageAlt: "Football Insights tactical dashboard showing pitch telemetry and player analytics",
+    liveUrl: "https://footy.rolanbacalla.online/",
+    liveLabel: "Open live project",
+  },
+  {
+    id: "lynda-plus",
+    title: "Lynda Plus",
+    domain: "UX Research · Product Concept",
+    year: "2025",
+    category: "Product Strategy",
+    icon: "research",
+    summary:
+      "An insight synthesis workspace helping product teams turn qualitative research sessions into structured, actionable decisions faster.",
+    problem:
+      "UX researchers and product managers spend hours tagging transcripts and clustering notes before stakeholders can act on findings.",
+    role: "Product strategy, UX architecture, research workflow design, and interface craft.",
+    outcome:
+      "Streamlined synthesis from raw session notes to prioritised themes with transparent source traceability.",
+    highlights: [
+      "Structured side-by-side transcript evidence and thematic clustering for fast verification.",
+      "Designed scannable research briefs tailored for hiring managers and product stakeholders.",
+      "Balanced dense analytical workflows with generous breathing room and clear typographic rhythm.",
+    ],
+    image: caseLyndaPlusImg,
+    imageAlt: "Minimalist London UX studio desk with research synthesis display",
+    liveUrl: "https://lynda.rolanbacalla.online/",
+    liveLabel: "Open live project",
   },
   {
     id: "nest-wallet",
