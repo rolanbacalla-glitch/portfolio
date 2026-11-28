@@ -8,20 +8,27 @@ interface StippleParticle {
   /** Normalised start coordinates (feathered bottom-left → top-right diagonal band) */
   startX: number;
   startY: number;
-  /** Normalised ring coordinates (hollow-centred circular condensation) */
+  /** Polar coordinates for the hollow-centred ring behind the editorial headline */
   ringAngle: number;
   ringRadiusFactor: number;
   /** Normalised settled home coordinates (stratified ambient stipple field) */
   endX: number;
   endY: number;
+  /** Radial burst multiplier so particles explode outward at varied speeds */
+  burstFactor: number;
   /** Live ambient coordinates in CSS pixels once Phase 3 begins */
   x: number;
   y: number;
-  /** Spring-damped cursor displacement offset in CSS pixels */
+  /** Spring-damped cursor magnet displacement offset in CSS pixels */
   offsetX: number;
   offsetY: number;
   offsetVx: number;
   offsetVy: number;
+  /** Unique halo angle & radius around the cursor when magnetised */
+  magnetAngle: number;
+  magnetOrbitRadius: number;
+  /** 0..1 magnetic memory: only magnetised dots linger and release slowly */
+  magnetCharge: number;
   /** Gentle bottom-left → top-right drift velocity (px/sec) */
   driftVx: number;
   driftVy: number;
@@ -40,9 +47,11 @@ interface StippleParticle {
 const DESKTOP_COUNT = 480;
 const MOBILE_COUNT = 140;
 const MAX_DPR = 2;
-const GATHER_DURATION_MS = 850;
-const ENTRANCE_DURATION_MS = 2400;
-const CURSOR_RADIUS = 125;
+const GATHER_DURATION_MS = 900;
+const HOLD_DURATION_MS = 180;
+const ENTRANCE_DURATION_MS = 2550;
+const CURSOR_RADIUS = 145;
+const MAX_MAGNETISED = 34;
 
 /** Mulberry32 deterministic PRNG so particle layout is balanced and repeatable. */
 function createSeededRandom(seed: number): () => number {
@@ -59,8 +68,8 @@ function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-function easeOutQuart(t: number): number {
-  return 1 - Math.pow(1 - t, 4);
+function easeOutExpo(t: number): number {
+  return t >= 1 ? 1 : 1 - Math.pow(2, -9 * t);
 }
 
 function clamp01(value: number): number {
@@ -70,8 +79,8 @@ function clamp01(value: number): number {
 /**
  * Generates deterministic stipple particles with 3 spatial anchors:
  * 1. Feathered diagonal band (bottom-left → top-right)
- * 2. Hollow-centred circular ring
- * 3. Stratified ambient field that transitions into gentle diagonal drift
+ * 2. Hollow-centred circular ring framed behind the editorial headline
+ * 3. Stratified ambient field after the radial burst
  */
 function buildParticles(
   count: number,
@@ -92,7 +101,7 @@ function buildParticles(
 
     // 2. Hollow-centred circular ring (denser near perimeter, lighter centre)
     const ringAngle = rand() * Math.PI * 2;
-    const ringRadiusFactor = 0.21 + (rand() + rand()) * 0.068;
+    const ringRadiusFactor = 0.68 + (rand() + rand()) * 0.18;
 
     // 3. Stratified jittered grid for even ambient distribution
     const col = i % cols;
@@ -110,12 +119,16 @@ function buildParticles(
       ringRadiusFactor,
       endX,
       endY,
+      burstFactor: 0.55 + rand() * 0.85,
       x: endX * width,
       y: endY * height,
       offsetX: 0,
       offsetY: 0,
       offsetVx: 0,
       offsetVy: 0,
+      magnetAngle: rand() * Math.PI * 2,
+      magnetOrbitRadius: 16 + rand() * 24,
+      magnetCharge: 0,
       driftVx: speed * 0.82,
       driftVy: -speed * 0.52,
       swayPhase: rand() * Math.PI * 2,
@@ -131,7 +144,7 @@ function buildParticles(
 
 /**
  * Gently softens particle opacity directly behind the left editorial headline and copy
- * while preserving crisp visibility across the rest of the Hero sheet.
+ * once settled, preserving crisp legibility across light and dark themes.
  */
 function editorialSafeAlpha(
   x: number,
@@ -161,7 +174,7 @@ function getPalette(theme: ThemeMode) {
       accentRgb: "84, 214, 174",
       peakOpacity: 0.62,
       settledOpacity: 0.34,
-      hoverBoost: 0.22,
+      magnetBoost: 0.26,
     };
   }
 
@@ -170,15 +183,17 @@ function getPalette(theme: ThemeMode) {
     accentRgb: "30, 148, 114",
     peakOpacity: 0.58,
     settledOpacity: 0.3,
-    hoverBoost: 0.18,
+    magnetBoost: 0.22,
   };
 }
 
 /**
- * Mercury Books-inspired hybrid stipple background for HeroSection (Option 1 + Option 2):
- * 1. Plays a ~2.4s diagonal-gather → ring-condensation → radial-diffusion entrance on mount.
- * 2. Transitions seamlessly into calm ambient diagonal drift with subtle desktop cursor magnetism.
- * 3. Automatically pauses offscreen (IntersectionObserver) and when the tab is hidden,
+ * Mercury Books-inspired hybrid stipple background for HeroSection:
+ * 1. Gathers into a circular ring framed directly behind the visible editorial headline area.
+ * 2. Bursts radially outward in all directions into a calm ambient stipple field.
+ * 3. Features selective cursor magnetism where only captured dots cluster gently around
+ *    the pointer and then release/drift away more slowly than the surrounding field.
+ * 4. Automatically pauses offscreen (IntersectionObserver) and when the tab is hidden,
  *    and renders a crisp static frame for `prefers-reduced-motion: reduce`.
  */
 export default function HeroStippleEntrance() {
@@ -189,7 +204,6 @@ export default function HeroStippleEntrance() {
 
   useEffect(() => {
     themeRef.current = theme;
-    // Immediately refresh static reduced-motion or paused frames on theme toggle
     if (staticRedrawRef.current) {
       staticRedrawRef.current();
     }
@@ -237,12 +251,10 @@ export default function HeroStippleEntrance() {
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        const x = p.x;
-        const y = p.y;
         const alpha =
           palette.settledOpacity *
           p.alphaScale *
-          editorialSafeAlpha(x, y, width, height);
+          editorialSafeAlpha(p.x, p.y, width, height);
 
         if (alpha <= 0.01) continue;
 
@@ -250,7 +262,7 @@ export default function HeroStippleEntrance() {
           p.isAccent ? palette.accentRgb : palette.primaryRgb
         }, ${alpha.toFixed(3)})`;
         ctx.beginPath();
-        ctx.arc(x, y, p.radius, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
       }
     };
@@ -264,15 +276,19 @@ export default function HeroStippleEntrance() {
       ctx.clearRect(0, 0, width, height);
 
       const palette = getPalette(themeRef.current);
-      const minDim = Math.min(width, height);
-      const ringCenterX = width >= 1024 ? width * 0.44 : width * 0.5;
-      const ringCenterY = height * 0.5;
+
+      // Target the visible editorial headline column (clear of the 3 opaque cards on desktop)
+      const isDesktop = width >= 1024;
+      const ringCenterX = isDesktop ? width * 0.22 : width * 0.5;
+      const ringCenterY = isDesktop ? height * 0.55 : height * 0.24;
+      const ringBaseRadius = isDesktop
+        ? Math.min(width * 0.175, height * 0.31)
+        : Math.min(width * 0.32, height * 0.15);
 
       if (!entranceComplete) {
         elapsedEntranceMs += dtSec * 1000;
         if (elapsedEntranceMs >= ENTRANCE_DURATION_MS) {
           entranceComplete = true;
-          // Lock ambient starting coordinates cleanly to each particle's settled home
           for (let i = 0; i < particles.length; i++) {
             particles[i].x = particles[i].endX * width;
             particles[i].y = particles[i].endY * height;
@@ -282,51 +298,105 @@ export default function HeroStippleEntrance() {
         ambientTimeSec += dtSec;
       }
 
+      // Select up to MAX_MAGNETISED closest dots within CURSOR_RADIUS during Phase 3
+      const capturedIndices = new Set<number>();
+      if (entranceComplete && hasFinePointer && pointer.active) {
+        const candidates: Array<{ index: number; distSq: number }> = [];
+        const radiusSq = CURSOR_RADIUS * CURSOR_RADIUS;
+
+        for (let i = 0; i < particles.length; i++) {
+          const dx = particles[i].x - pointer.x;
+          const dy = particles[i].y - pointer.y;
+          const distSq = dx * dx + dy * dy;
+          if (distSq < radiusSq) {
+            candidates.push({ index: i, distSq });
+          }
+        }
+
+        if (candidates.length > MAX_MAGNETISED) {
+          candidates.sort((a, b) => a.distSq - b.distSq);
+        }
+
+        const cap = Math.min(candidates.length, MAX_MAGNETISED);
+        for (let c = 0; c < cap; c++) {
+          capturedIndices.add(candidates[c].index);
+        }
+      }
+
       const margin = 12;
+      const burstStartMs = GATHER_DURATION_MS + HOLD_DURATION_MS;
+      const burstWindowMs = ENTRANCE_DURATION_MS - burstStartMs;
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         let drawX: number;
         let drawY: number;
         let baseOpacity: number;
-        let hoverAlphaBoost = 0;
+        let magnetAlphaBoost = 0;
+        let safeZoneBlend = 1;
 
         if (!entranceComplete) {
-          const ringX =
-            ringCenterX + Math.cos(p.ringAngle) * (minDim * p.ringRadiusFactor);
-          const ringY =
-            ringCenterY + Math.sin(p.ringAngle) * (minDim * p.ringRadiusFactor);
+          const ringR = ringBaseRadius * p.ringRadiusFactor;
+          const ringX = ringCenterX + Math.cos(p.ringAngle) * ringR;
+          const ringY = ringCenterY + Math.sin(p.ringAngle) * ringR;
 
           const startX = p.startX * width;
           const startY = p.startY * height;
           const endX = p.endX * width;
           const endY = p.endY * height;
 
-          const staggeredMs = Math.max(0, elapsedEntranceMs - p.delay * 450);
+          const staggeredMs = Math.max(0, elapsedEntranceMs - p.delay * 420);
 
           if (staggeredMs <= GATHER_DURATION_MS) {
-            // Phase 1: Feathered diagonal swath gathers into a circular ring
+            // Phase 1: Feathered diagonal swath gathers into the headline ring
             const t = easeInOutCubic(clamp01(staggeredMs / GATHER_DURATION_MS));
             drawX = startX + (ringX - startX) * t;
             drawY = startY + (ringY - startY) * t;
             baseOpacity = 0.08 + (palette.peakOpacity - 0.08) * t;
+            safeZoneBlend = 0.15;
+          } else if (staggeredMs <= burstStartMs) {
+            // Micro-hold: slight inward compression right before radial explosion
+            const holdT = clamp01((staggeredMs - GATHER_DURATION_MS) / HOLD_DURATION_MS);
+            const squeeze = 1 - Math.sin(holdT * Math.PI) * 0.06;
+            drawX = ringCenterX + (ringX - ringCenterX) * squeeze;
+            drawY = ringCenterY + (ringY - ringCenterY) * squeeze;
+            baseOpacity = palette.peakOpacity;
+            safeZoneBlend = 0.15;
           } else {
-            // Phase 2: Ring diffuses radially outward into the ambient field
-            const diffuseWindow = ENTRANCE_DURATION_MS - GATHER_DURATION_MS;
-            const t = easeOutQuart(
-              clamp01((staggeredMs - GATHER_DURATION_MS) / diffuseWindow)
-            );
-            drawX = ringX + (endX - ringX) * t;
-            drawY = ringY + (endY - ringY) * t;
+            // Phase 2: Radial explosion outward in all directions to settled positions
+            const rawT = clamp01((staggeredMs - burstStartMs) / burstWindowMs);
+            const t = easeOutExpo(rawT);
+
+            // Brief outward radial kick along ringAngle that peaks early then blends into target
+            const burstEnvelope = Math.sin(rawT * Math.PI) * (1 - rawT * 0.45);
+            const burstKick = burstEnvelope * ringBaseRadius * 0.65 * p.burstFactor;
+            const kickX = Math.cos(p.ringAngle) * burstKick;
+            const kickY = Math.sin(p.ringAngle) * burstKick;
+
+            drawX = ringX + (endX - ringX) * t + kickX;
+            drawY = ringY + (endY - ringY) * t + kickY;
             baseOpacity =
               palette.peakOpacity +
-              (palette.settledOpacity - palette.peakOpacity) * t;
+              (palette.settledOpacity - palette.peakOpacity) * rawT;
+            safeZoneBlend = 0.15 + 0.85 * rawT;
           }
         } else {
-          // Phase 3 (Option 1): Calm ambient diagonal drift + subtle desktop cursor magnetism
+          // Phase 3: Calm ambient drift + selective cursor magnetism with slow release
+          const isCaptured = capturedIndices.has(i);
+
+          if (isCaptured) {
+            // Ramp up magnetic charge briskly while captured
+            p.magnetCharge = Math.min(1, p.magnetCharge + dtSec * 4.5);
+          } else if (p.magnetCharge > 0) {
+            // Release slowly so only magnetised dots trail and peel away gracefully
+            p.magnetCharge = Math.max(0, p.magnetCharge - dtSec * 0.72);
+          }
+
+          // Slow down ambient drift only for dots currently peeling away from the magnet
+          const driftPace = 1 - p.magnetCharge * 0.68;
           const sway = Math.sin(ambientTimeSec * 0.7 + p.swayPhase) * 3.5;
-          p.x += p.driftVx * dtSec;
-          p.y += (p.driftVy + sway * 0.25) * dtSec;
+          p.x += p.driftVx * driftPace * dtSec;
+          p.y += (p.driftVy + sway * 0.25) * driftPace * dtSec;
 
           // Seamless edge wrapping
           if (p.x > width + margin) p.x = -margin;
@@ -334,44 +404,44 @@ export default function HeroStippleEntrance() {
           if (p.y < -margin) p.y = height + margin;
           if (p.y > height + margin) p.y = -margin;
 
-          // Spring-damped cursor interaction (desktop fine pointer only)
           let targetOx = 0;
           let targetOy = 0;
 
-          if (hasFinePointer && pointer.active) {
-            const dx = p.x - pointer.x;
-            const dy = p.y - pointer.y;
-            const distSq = dx * dx + dy * dy;
-
-            if (distSq < CURSOR_RADIUS * CURSOR_RADIUS && distSq > 0.01) {
-              const dist = Math.sqrt(distSq);
-              const influence = 1 - dist / CURSOR_RADIUS;
-              const eased = influence * influence;
-              // Gentle radial dispersion away from cursor + subtle glow
-              const push = eased * 18;
-              targetOx = (dx / dist) * push;
-              targetOy = (dy / dist) * push;
-              hoverAlphaBoost = eased * palette.hoverBoost;
-            }
+          if (isCaptured) {
+            // Pull inward toward a delicate orbiting halo around the cursor
+            const orbitAngle = p.magnetAngle + ambientTimeSec * 0.45;
+            const desiredX = pointer.x + Math.cos(orbitAngle) * p.magnetOrbitRadius;
+            const desiredY = pointer.y + Math.sin(orbitAngle) * p.magnetOrbitRadius;
+            targetOx = desiredX - p.x;
+            targetOy = desiredY - p.y;
           }
 
-          // Critically damped spring integration for silky settle
-          const stiffness = 14;
-          const damping = 7.5;
-          p.offsetVx += ((targetOx - p.offsetX) * stiffness - p.offsetVx * damping) * dtSec;
-          p.offsetVy += ((targetOy - p.offsetY) * stiffness - p.offsetVy * damping) * dtSec;
-          p.offsetX += p.offsetVx * dtSec;
-          p.offsetY += p.offsetVy * dtSec;
+          // Fast magnetic capture vs. slow, velvety release for magnetised dots only
+          if (isCaptured || p.magnetCharge > 0.005 || Math.abs(p.offsetX) > 0.05 || Math.abs(p.offsetY) > 0.05) {
+            const stiffness = isCaptured ? 16 : 2.1;
+            const damping = isCaptured ? 7.2 : 3.9;
+            p.offsetVx += ((targetOx - p.offsetX) * stiffness - p.offsetVx * damping) * dtSec;
+            p.offsetVy += ((targetOy - p.offsetY) * stiffness - p.offsetVy * damping) * dtSec;
+            p.offsetX += p.offsetVx * dtSec;
+            p.offsetY += p.offsetVy * dtSec;
+          } else {
+            p.offsetX = 0;
+            p.offsetY = 0;
+            p.offsetVx = 0;
+            p.offsetVy = 0;
+          }
 
           drawX = p.x + p.offsetX;
           drawY = p.y + p.offsetY;
           baseOpacity = palette.settledOpacity;
+          magnetAlphaBoost = p.magnetCharge * palette.magnetBoost;
         }
 
-        const safeZoneMultiplier = editorialSafeAlpha(drawX, drawY, width, height);
+        const safeAlpha = editorialSafeAlpha(drawX, drawY, width, height);
+        const safeZoneMultiplier = 1 - (1 - safeAlpha) * safeZoneBlend;
         const alpha = Math.min(
           0.85,
-          (baseOpacity + hoverAlphaBoost) * p.alphaScale * safeZoneMultiplier
+          (baseOpacity + magnetAlphaBoost) * p.alphaScale * safeZoneMultiplier
         );
 
         if (alpha <= 0.01) continue;
@@ -398,7 +468,6 @@ export default function HeroStippleEntrance() {
         return;
       }
 
-      // Clamp frame delta to avoid large jumps after tab resume
       const dtSec = Math.min(0.05, Math.max(0.001, (now - lastFrameTime) / 1000));
       lastFrameTime = now;
 
@@ -436,7 +505,6 @@ export default function HeroStippleEntrance() {
       if (particles.length !== targetCount) {
         particles = buildParticles(targetCount, width, height);
       } else if (prevWidth > 0 && prevHeight > 0) {
-        // Proportionally rescale live coordinates on viewport resize
         const scaleX = width / prevWidth;
         const scaleY = height / prevHeight;
         for (let i = 0; i < particles.length; i++) {
