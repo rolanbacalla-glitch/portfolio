@@ -35,3 +35,4 @@ When a task reaches a deadlock, repeated build failure, or a logic loop, the fol
   - **Gemma’s Action**: Gemma performs a root-cause analysis on the error log, determines if the fault is in the code logic or the execution command, and provides a corrected instruction.
 
 - **The "No-Loop" Rule**: If a proposed solution fails twice in a row, the agents must stop and perform a "Cross-Audit." Gemma will explain the *intent* of the code, and Gemini will report the *reality* of the environment, and they will jointly determine a new path forward.
+

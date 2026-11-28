@@ -38,6 +38,8 @@ export interface DisciplineCard {
   icon: "lightbulb" | "monitor" | "chart";
   image: StaticImageData;
   imageAlt: string;
+  videoWebm?: string;
+  videoMp4?: string;
   filterTarget: Exclude<WorkCategory, "All">;
   zoomClass?: string;
 }
@@ -114,6 +116,8 @@ export const heroDisciplines: DisciplineCard[] = [
     icon: "lightbulb",
     image: heroStrategyImg,
     imageAlt: "Curved modern glass architecture rising against a blue sky",
+    videoWebm: "/videos/hero-strategy.webm",
+    videoMp4: "/videos/hero-strategy.mp4",
     filterTarget: "Product Strategy",
   },
   {
@@ -125,6 +129,8 @@ export const heroDisciplines: DisciplineCard[] = [
     image: heroExperiencesImg,
     imageAlt:
       "Minimalist smartphone displaying a modern mobile audio app interface beside a brushed aluminium control dial on a warm peach backdrop",
+    videoWebm: "/videos/hero-experiences.webm",
+    videoMp4: "/videos/hero-experiences.mp4",
     filterTarget: "Digital Experiences",
     zoomClass: "object-center group-hover:scale-[1.05]",
   },
@@ -136,6 +142,8 @@ export const heroDisciplines: DisciplineCard[] = [
     icon: "chart",
     image: heroSystemsImg,
     imageAlt: "Sculptural mint and emerald layered geometric waves",
+    videoWebm: "/videos/hero-systems.webm",
+    videoMp4: "/videos/hero-systems.mp4",
     filterTarget: "Design Systems",
     zoomClass: "scale-[1.18] group-hover:scale-[1.24]",
   },
