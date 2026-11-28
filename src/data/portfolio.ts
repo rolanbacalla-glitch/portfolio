@@ -282,7 +282,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     image: caseTravelKinImg,
     imageAlt: "Sunlit Mediterranean architectural terrace overlooking calm sea horizon",
-    liveUrl: "https://travel-kin.rolanbacalla.space/",
+    liveUrl: "https://travel.rolanbacalla.online/",
     liveLabel: "Open live project",
   },
   {
@@ -306,7 +306,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     image: caseLyndaPlusImg,
     imageAlt: "Minimalist London UX studio desk with research synthesis display",
-    liveUrl: "https://lynda-plus.rolanbacalla.space/",
+    liveUrl: "https://lynda.rolanbacalla.online/",
     liveLabel: "Open live project",
   },
   {
@@ -330,7 +330,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     image: caseDesignSystemsImg,
     imageAlt: "Modular geometric ceramic and frosted glass design system blocks",
-    liveUrl: "https://design-system.rolanbacalla.space/",
+    liveUrl: "https://design.rolanbacalla.online/",
     liveLabel: "Inspect system",
   },
   {
@@ -477,7 +477,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     image: caseTokenArchitectureSpecImg,
     imageAlt: "Three stepped tiers of ceramic, brushed aluminium, and frosted glass design token swatches",
-    liveUrl: "https://design-system.rolanbacalla.space/",
+    liveUrl: "https://design.rolanbacalla.online/",
     liveLabel: "Inspect system",
   },
   {
