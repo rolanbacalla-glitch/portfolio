@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import Image from "next/image";
 import { BarChart3, Lightbulb, Monitor } from "lucide-react";
 import type { DisciplineCard, WorkCategory } from "@/data/portfolio";
@@ -10,8 +16,29 @@ interface HeroDisciplineCardProps {
   onSelectDiscipline: (category: Exclude<WorkCategory, "All">) => void;
 }
 
-const HOVER_INTENT_MS = 120;
-const FADE_OUT_PAUSE_MS = 220;
+// Research-backed timing for hoverable portfolio showcase cards:
+// - 4.0s seamless video loop (30fps, muted, audio track stripped)
+// - 300ms hover-intent delay on desktop to prevent accidental cursor-sweep strobing
+// - 200ms snappy fade-in, 150ms graceful exit fade-out before pause
+const HOVER_INTENT_MS = 300;
+const FADE_OUT_PAUSE_MS = 150;
+const DESKTOP_HOVER_QUERY = "(hover: hover) and (pointer: fine)";
+
+function subscribeDesktopHover(callback: () => void) {
+  if (typeof window === "undefined") return () => {};
+  const mql = window.matchMedia(DESKTOP_HOVER_QUERY);
+  mql.addEventListener("change", callback);
+  return () => mql.removeEventListener("change", callback);
+}
+
+function getDesktopHoverSnapshot() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia(DESKTOP_HOVER_QUERY).matches;
+}
+
+function getDesktopHoverServerSnapshot() {
+  return false;
+}
 
 function DisciplineIcon({ type }: { type: "lightbulb" | "monitor" | "chart" }) {
   if (type === "lightbulb") {
@@ -31,13 +58,21 @@ export default function HeroDisciplineCard({
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pauseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // True only on non-mobile devices with a real mouse/trackpad fine pointer
+  const supportsDesktopHover = useSyncExternalStore(
+    subscribeDesktopHover,
+    getDesktopHoverSnapshot,
+    getDesktopHoverServerSnapshot
+  );
+
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+  const [isKeyboardFocused, setIsKeyboardFocused] = useState(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
 
   const hasVideo = Boolean(card.videoMp4 || card.videoWebm);
-  const isActive = isHovered || isPressed || isFocused;
+  const isHoverActive = supportsDesktopHover && isHovered;
+  const isActive = isHoverActive || isPressed || isKeyboardFocused;
 
   const clearTimers = useCallback(() => {
     if (hoverTimerRef.current) {
@@ -78,7 +113,7 @@ export default function HeroDisciplineCard({
         });
       }
     } else {
-      // Allow the 200ms opacity fade-out to finish before pausing the loop
+      // Wait for the 150ms fade-out transition before pausing so the exit stays smooth
       pauseTimerRef.current = setTimeout(() => {
         if (videoRef.current && !videoRef.current.paused) {
           videoRef.current.pause();
@@ -94,7 +129,8 @@ export default function HeroDisciplineCard({
   }, [clearTimers]);
 
   const handlePointerEnter = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (e.pointerType === "touch") return;
+    // Strictly disable hover playback on touch/mobile devices
+    if (!supportsDesktopHover || e.pointerType !== "mouse") return;
     syncReadyState();
     if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
     hoverTimerRef.current = setTimeout(() => {
@@ -102,12 +138,14 @@ export default function HeroDisciplineCard({
     }, HOVER_INTENT_MS);
   };
 
-  const handlePointerLeave = () => {
+  const handlePointerLeave = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (hoverTimerRef.current) {
       clearTimeout(hoverTimerRef.current);
       hoverTimerRef.current = null;
     }
-    setIsHovered(false);
+    if (e.pointerType === "mouse") {
+      setIsHovered(false);
+    }
     setIsPressed(false);
   };
 
@@ -129,13 +167,16 @@ export default function HeroDisciplineCard({
     setIsHovered(false);
   };
 
-  const handleFocus = () => {
-    syncReadyState();
-    setIsFocused(true);
+  const handleFocus = (e: React.FocusEvent<HTMLButtonElement>) => {
+    // Only activate focus preview on keyboard navigation (not mobile taps)
+    if (supportsDesktopHover && e.currentTarget.matches(":focus-visible")) {
+      syncReadyState();
+      setIsKeyboardFocused(true);
+    }
   };
 
   const handleBlur = () => {
-    setIsFocused(false);
+    setIsKeyboardFocused(false);
     setIsPressed(false);
   };
 
@@ -152,7 +193,14 @@ export default function HeroDisciplineCard({
     }
   };
 
-  const mediaScaleClass = card.zoomClass ?? "group-hover:scale-[1.05]";
+  // Preserve base scale (e.g. scale-[1.18] for Design Systems) on all devices,
+  // but apply hover zoom only on non-mobile fine-pointer devices.
+  const baseScaleClass = card.id === "systems" ? "scale-[1.18]" : "";
+  const desktopHoverScaleClass = supportsDesktopHover
+    ? card.id === "systems"
+      ? "hover:scale-[1.24] group-hover:scale-[1.24]"
+      : "group-hover:scale-[1.05]"
+    : "";
   const showVideo = hasVideo && isActive && isVideoReady;
 
   return (
@@ -170,12 +218,16 @@ export default function HeroDisciplineCard({
       onKeyUp={handleKeyUp}
       data-pressed={isPressed ? "true" : undefined}
       className={`group relative flex min-h-[380px] flex-col justify-between overflow-hidden rounded-[24px] bg-[#10161C] p-5 text-left transition-transform duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] dark:ring-1 dark:ring-white/[0.08] dark:focus-visible:outline-[#54D6AE] sm:min-h-[460px] lg:min-h-[520px] lg:rounded-[28px] lg:p-6 cursor-pointer select-none ${
-        isPressed ? "scale-[0.985]" : "hover:-translate-y-1"
+        isPressed
+          ? "scale-[0.985]"
+          : supportsDesktopHover
+            ? "hover:-translate-y-1"
+            : ""
       }`}
     >
       {/* Shared Media Stage so static poster & looping video scale in exact lockstep */}
       <div
-        className={`pointer-events-none absolute inset-0 transition-transform duration-700 ease-out ${mediaScaleClass}`}
+        className={`pointer-events-none absolute inset-0 transition-transform duration-700 ease-out ${baseScaleClass} ${desktopHoverScaleClass}`}
       >
         <Image
           src={card.image}
@@ -193,14 +245,16 @@ export default function HeroDisciplineCard({
             muted
             loop
             playsInline
-            preload="auto"
+            preload={supportsDesktopHover ? "auto" : "metadata"}
             aria-hidden="true"
             tabIndex={-1}
             onCanPlay={() => setIsVideoReady(true)}
             onLoadedData={() => setIsVideoReady(true)}
             onPlaying={() => setIsVideoReady(true)}
-            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-200 ease-out ${
-              showVideo ? "opacity-100" : "opacity-0"
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity ease-out ${
+              showVideo
+                ? "opacity-100 duration-200"
+                : "opacity-0 duration-150"
             }`}
           >
             {card.videoWebm && (
@@ -220,7 +274,11 @@ export default function HeroDisciplineCard({
       {/* Top-Left Circular Dark Icon */}
       <div
         className={`relative z-10 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#10161C]/95 text-white shadow-sm transition-transform duration-200 ${
-          isPressed ? "scale-95" : "group-hover:scale-105"
+          isPressed
+            ? "scale-95"
+            : supportsDesktopHover
+              ? "group-hover:scale-105"
+              : ""
         }`}
       >
         <DisciplineIcon type={card.icon} />
