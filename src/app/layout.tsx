@@ -17,28 +17,44 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+const SITE_TITLE = "Rolan Bacalla — UX/UI & Product Designer";
+const SITE_DESCRIPTION =
+  "London-based UX/UI and product designer turning complex product ideas into clear, intuitive digital experiences across connected audio, mobile apps, and design systems.";
+
+const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.APP_URL;
+const metadataBase = (() => {
+  if (!rawSiteUrl) return undefined;
+  try {
+    return new URL(rawSiteUrl);
+  } catch {
+    return undefined;
+  }
+})();
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Rolan Bacalla",
+  jobTitle: "UX/UI & Product Designer",
+  description: SITE_DESCRIPTION,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "London",
+    addressCountry: "GB",
+  },
+  sameAs: [
+    "https://www.linkedin.com/in/rolan-bacalla/",
+    "https://github.com/rolanbacalla-glitch/",
+  ],
+};
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rolanbacalla.online"),
+  ...(metadataBase ? { metadataBase } : {}),
   title: {
     template: "%s | Rolan Bacalla",
-    default: "Rolan Bacalla — UX/UI & Product Designer",
+    default: SITE_TITLE,
   },
-  description:
-    "London-based UX/UI and product designer turning complex product ideas into clear, intuitive digital experiences across connected audio, mobile apps, and design systems.",
-  keywords: [
-    "Rolan Bacalla",
-    "UX Designer",
-    "UI Designer",
-    "Product Designer",
-    "Design Systems",
-    "London Product Designer",
-    "Portfolio",
-  ],
-  authors: [{ name: "Rolan Bacalla", url: "https://rolanbacalla.online" }],
-  creator: "Rolan Bacalla",
-  alternates: {
-    canonical: "/",
-  },
+  description: SITE_DESCRIPTION,
   verification: {
     google: "6owHdHm79aL_eOwfX7Z1oPO6bsk4yO16l26nRwDiqMU",
   },
@@ -48,46 +64,23 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
+      "max-video-preview": -1,
     },
   },
   openGraph: {
-    title: "Rolan Bacalla — UX/UI & Product Designer",
-    description:
-      "London-based UX/UI and product designer turning complex product ideas into clear, intuitive digital experiences across connected audio, mobile apps, and design systems.",
-    url: "https://rolanbacalla.online",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     siteName: "Rolan Bacalla",
     type: "website",
     locale: "en_GB",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rolan Bacalla — UX/UI & Product Designer",
-    description:
-      "London-based UX/UI and product designer turning complex product ideas into clear, intuitive digital experiences across connected audio, mobile apps, and design systems.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
   },
-};
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Person",
-      name: "Rolan Bacalla",
-      url: "https://rolanbacalla.online",
-      jobTitle: "UX/UI & Product Designer",
-      description:
-        "London-based UX/UI and product designer specialising in connected audio, mobile apps, and design systems.",
-    },
-    {
-      "@type": "WebSite",
-      name: "Rolan Bacalla",
-      url: "https://rolanbacalla.online",
-      inLanguage: "en-GB",
-    },
-  ],
 };
 
 export default function RootLayout({
@@ -103,12 +96,12 @@ export default function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-      </head>
-      <body className="min-h-full bg-[#EAECEF] text-[#10161C] transition-colors duration-200 dark:bg-[#070A0E] dark:text-[#F4F6F9] font-sans">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
+      </head>
+      <body className="min-h-full bg-[#EAECEF] text-[#10161C] transition-colors duration-200 dark:bg-[#070A0E] dark:text-[#F4F6F9] font-sans">
         <ThemeProvider>
           <SmoothScrollProvider>{children}</SmoothScrollProvider>
         </ThemeProvider>
