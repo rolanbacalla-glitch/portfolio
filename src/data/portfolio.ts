@@ -318,7 +318,7 @@ export const caseStudies: CaseStudy[] = [
     category: "Product Strategy",
     icon: "trending",
     summary:
-      "Live tactical intelligence engine delivering Premier League pass networks, player recruitment metrics, and interactive match visualisations.",
+      "Live tactical intelligence engine delivering Premier League pass networks, player recruitment metrics, and interactive match dynamics.",
     problem:
       "Supporters and tactical analysts face clunky, fragmented statistics dashboards that fail to convey spatial pitch dynamics and match momentum clearly.",
     role: "Product strategy, data visualisation UX, tactical pitch modeling, and dark-theme interface craft.",
