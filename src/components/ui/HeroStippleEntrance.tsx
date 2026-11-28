@@ -40,12 +40,16 @@ interface StippleParticle {
   delay: number;
   /** Whether this dot uses the emerald accent colour (~20%) */
   isAccent: boolean;
+  /** Extra particles that enrich the initial gather/ring and fade out during the radial burst */
+  entranceOnly: boolean;
   /** Per-dot subtle opacity multiplier */
   alphaScale: number;
 }
 
-const DESKTOP_COUNT = 480;
-const MOBILE_COUNT = 140;
+const DESKTOP_AMBIENT_COUNT = 480;
+const DESKTOP_ENTRANCE_TOTAL = 960;
+const MOBILE_AMBIENT_COUNT = 140;
+const MOBILE_ENTRANCE_TOTAL = 280;
 const MAX_DPR = 2;
 const GATHER_DURATION_MS = 900;
 const HOLD_DURATION_MS = 180;
@@ -83,16 +87,19 @@ function clamp01(value: number): number {
  * 3. Stratified ambient field after the radial burst
  */
 function buildParticles(
-  count: number,
+  ambientCount: number,
+  totalCount: number,
   width: number,
   height: number
 ): StippleParticle[] {
   const rand = createSeededRandom(20261128);
-  const cols = Math.max(1, Math.round(Math.sqrt(count * 1.65)));
-  const rows = Math.max(1, Math.ceil(count / cols));
+  const cols = Math.max(1, Math.round(Math.sqrt(ambientCount * 1.65)));
+  const rows = Math.max(1, Math.ceil(ambientCount / cols));
   const particles: StippleParticle[] = [];
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < totalCount; i++) {
+    const entranceOnly = i >= ambientCount;
+
     // 1. Diagonal band from bottom-left (0, 1) to top-right (1, 0)
     const along = rand();
     const spread = (rand() + rand() + rand() - 1.5) * 0.24;
@@ -101,13 +108,13 @@ function buildParticles(
 
     // 2. Hollow-centred circular ring (denser near perimeter, lighter centre)
     const ringAngle = rand() * Math.PI * 2;
-    const ringRadiusFactor = 0.68 + (rand() + rand()) * 0.18;
+    const ringRadiusFactor = 0.64 + (rand() + rand()) * 0.2;
 
-    // 3. Stratified jittered grid for even ambient distribution
+    // 3. Stratified jittered grid for persistent ambient dots; wide scatter for entrance-only burst dots
     const col = i % cols;
     const row = Math.floor(i / cols);
-    const endX = clamp01((col + 0.14 + rand() * 0.72) / cols);
-    const endY = clamp01((row + 0.14 + rand() * 0.72) / rows);
+    const endX = entranceOnly ? rand() : clamp01((col + 0.14 + rand() * 0.72) / cols);
+    const endY = entranceOnly ? rand() : clamp01((row + 0.14 + rand() * 0.72) / rows);
 
     // Calm bottom-left → top-right ambient drift (px per second)
     const speed = 7 + rand() * 11;
@@ -119,7 +126,7 @@ function buildParticles(
       ringRadiusFactor,
       endX,
       endY,
-      burstFactor: 0.55 + rand() * 0.85,
+      burstFactor: entranceOnly ? 0.9 + rand() * 1.15 : 0.55 + rand() * 0.85,
       x: endX * width,
       y: endY * height,
       offsetX: 0,
@@ -135,6 +142,7 @@ function buildParticles(
       radius: 0.65 + rand() * 0.65,
       delay: rand() * 0.14,
       isAccent: rand() < 0.2,
+      entranceOnly,
       alphaScale: 0.74 + rand() * 0.26,
     });
   }
@@ -251,6 +259,7 @@ export default function HeroStippleEntrance() {
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
+        if (p.entranceOnly) continue;
         const alpha =
           palette.settledOpacity *
           p.alphaScale *
@@ -305,6 +314,7 @@ export default function HeroStippleEntrance() {
         const radiusSq = CURSOR_RADIUS * CURSOR_RADIUS;
 
         for (let i = 0; i < particles.length; i++) {
+          if (particles[i].entranceOnly) continue;
           const dx = particles[i].x - pointer.x;
           const dy = particles[i].y - pointer.y;
           const distSq = dx * dx + dy * dy;
@@ -375,12 +385,14 @@ export default function HeroStippleEntrance() {
 
             drawX = ringX + (endX - ringX) * t + kickX;
             drawY = ringY + (endY - ringY) * t + kickY;
+            const targetOpacity = p.entranceOnly ? 0 : palette.settledOpacity;
             baseOpacity =
               palette.peakOpacity +
-              (palette.settledOpacity - palette.peakOpacity) * rawT;
+              (targetOpacity - palette.peakOpacity) * rawT;
             safeZoneBlend = 0.15 + 0.85 * rawT;
           }
         } else {
+          if (p.entranceOnly) continue;
           // Phase 3: Calm ambient drift + selective cursor magnetism with slow release
           const isCaptured = capturedIndices.has(i);
 
@@ -501,9 +513,12 @@ export default function HeroStippleEntrance() {
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
 
-      const targetCount = width >= 768 ? DESKTOP_COUNT : MOBILE_COUNT;
-      if (particles.length !== targetCount) {
-        particles = buildParticles(targetCount, width, height);
+      const targetAmbient =
+        width >= 768 ? DESKTOP_AMBIENT_COUNT : MOBILE_AMBIENT_COUNT;
+      const targetTotal =
+        width >= 768 ? DESKTOP_ENTRANCE_TOTAL : MOBILE_ENTRANCE_TOTAL;
+      if (particles.length !== targetTotal) {
+        particles = buildParticles(targetAmbient, targetTotal, width, height);
       } else if (prevWidth > 0 && prevHeight > 0) {
         const scaleX = width / prevWidth;
         const scaleY = height / prevHeight;
