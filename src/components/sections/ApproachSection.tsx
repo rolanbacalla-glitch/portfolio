@@ -38,7 +38,7 @@ export default function ApproachSection() {
   return (
     <section
       id="approach"
-      className="relative overflow-hidden rounded-[28px] bg-[#0F131A] px-6 py-10 text-white sm:px-10 sm:py-12 lg:rounded-[36px] lg:px-14 lg:py-14"
+      className="relative overflow-hidden rounded-[28px] bg-[#0F131A] px-6 py-10 text-white transition-colors duration-200 dark:border dark:border-white/[0.08] dark:bg-[#161B26] sm:px-10 sm:py-12 lg:rounded-[36px] lg:px-14 lg:py-14"
     >
       <div className="grid grid-cols-1 items-stretch gap-10 lg:grid-cols-12 lg:gap-8">
         {/* Left Editorial Column */}
@@ -88,7 +88,7 @@ export default function ApproachSection() {
               <ul className="mt-4 space-y-1.5 text-[13px] text-white/80">
                 {currentStep.deliverables.map((item) => (
                   <li key={item} className="flex items-center gap-2">
-                    <span className="text-[#2CA884]" aria-hidden="true">
+                    <span className="text-[#2CA884] dark:text-[#54D6AE]" aria-hidden="true">
                       —
                     </span>
                     <span>{item}</span>
@@ -149,7 +149,7 @@ export default function ApproachSection() {
                   className={`group flex min-h-[220px] flex-col justify-between rounded-[24px] p-6 text-left transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C8BFFF] lg:min-h-[240px] lg:rounded-[28px] lg:p-7 cursor-pointer ${
                     isActive
                       ? "bg-gradient-to-b from-[#D2C9FF] to-[#C2B6FF] text-[#10161C]"
-                      : "border border-white/[0.06] bg-[#191E28] text-white hover:border-white/[0.12] hover:bg-[#1F2531]"
+                      : "border border-white/[0.06] bg-[#191E28] text-white hover:border-white/[0.12] hover:bg-[#1F2531] dark:border-white/[0.08] dark:bg-[#1F2636] dark:hover:border-white/15 dark:hover:bg-[#273044]"
                   }`}
                 >
                   <div className="flex w-full items-start justify-between">

@@ -373,11 +373,11 @@ export default function VisualArchivePopout({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.98 }}
             transition={{ duration: 0.22 }}
-            className="flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-[#D8D4CB] bg-[#FAF8F5] text-[#10161C] shadow-2xl"
+            className="flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-[#D8D4CB] bg-[#FAF8F5] text-[#10161C] shadow-2xl dark:border-white/10 dark:bg-[#11161F] dark:text-[#F4F6F9]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Popout Top Bar */}
-            <div className="flex items-center justify-between gap-4 border-b border-[#D8D4CB] bg-[#FAF8F5] px-5 py-4 sm:px-8 sm:py-5">
+            <div className="flex items-center justify-between gap-4 border-b border-[#D8D4CB] bg-[#FAF8F5] px-5 py-4 dark:border-white/10 dark:bg-[#11161F] sm:px-8 sm:py-5">
               <div className="flex items-center gap-3">
                 {selectedWork ? (
                   <button
@@ -386,25 +386,25 @@ export default function VisualArchivePopout({
                       setSelectedWork(null);
                       setStepIdx(0);
                     }}
-                    className="inline-flex min-h-[40px] cursor-pointer items-center gap-1.5 rounded-full border border-[#D8D4CB] bg-white px-4 text-xs font-semibold text-[#10161C] transition-colors hover:border-[#10161C] focus-visible:outline-2 focus-visible:outline-[#2CA884] focus-visible:outline-offset-2"
+                    className="inline-flex min-h-[40px] cursor-pointer items-center gap-1.5 rounded-full border border-[#D8D4CB] bg-white px-4 text-xs font-semibold text-[#10161C] transition-colors hover:border-[#10161C] focus-visible:outline-2 focus-visible:outline-[#2CA884] focus-visible:outline-offset-2 dark:border-white/15 dark:bg-[#19202D] dark:text-[#F4F6F9] dark:hover:border-white/35"
                   >
                     <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
                     All 18 Works
                   </button>
                 ) : (
-                  <span className="inline-flex h-7 items-center rounded-full bg-[#0F131A] px-3 font-mono text-[11px] font-semibold tabular-nums text-white">
+                  <span className="inline-flex h-7 items-center rounded-full bg-[#0F131A] px-3 font-mono text-[11px] font-semibold tabular-nums text-white dark:bg-[#F4F6F9] dark:text-[#0F131A]">
                     ARCHIVE · 18
                   </span>
                 )}
                 <div>
                   <h2
                     id="visual-archive-popout-title"
-                    className="font-heading text-lg font-bold tracking-[-0.02em] text-[#10161C] sm:text-xl"
+                    className="font-heading text-lg font-bold tracking-[-0.02em] text-[#10161C] dark:text-[#F4F6F9] sm:text-xl"
                   >
                     {selectedWork ? selectedWork.title : "Selected Visual Archive"}
                   </h2>
                   {!selectedWork && (
-                    <p className="hidden text-xs text-[#6B7280] sm:block">
+                    <p className="hidden text-xs text-[#6B7280] dark:text-[#9CA6B5] sm:block">
                       Hardware-to-cloud ecosystems, FinTech, EV SaaS, design systems &amp; brand craft
                     </p>
                   )}
@@ -416,7 +416,7 @@ export default function VisualArchivePopout({
                 type="button"
                 onClick={onClose}
                 aria-label="Close visual archive popout"
-                className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#0F131A] text-white transition-colors hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-[#2CA884] focus-visible:outline-offset-2"
+                className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#0F131A] text-white transition-colors hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-[#2CA884] focus-visible:outline-offset-2 dark:bg-[#19202D] dark:text-[#F4F6F9] dark:hover:bg-[#232D3F]"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
               </button>
@@ -443,12 +443,18 @@ export default function VisualArchivePopout({
                           onClick={() => setActivePillar(pillar.id)}
                           className={`min-h-[40px] cursor-pointer rounded-full px-4 py-2 text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-[#2CA884] focus-visible:outline-offset-2 ${
                             isActive
-                              ? "bg-[#0F171E] text-white"
-                              : "border border-[#D8D4CB] bg-white text-[#10161C] hover:border-[#10161C]"
+                              ? "bg-[#0F171E] text-white dark:bg-[#F4F6F9] dark:text-[#0F131A]"
+                              : "border border-[#D8D4CB] bg-white text-[#10161C] hover:border-[#10161C] dark:border-white/15 dark:bg-[#19202D] dark:text-[#F4F6F9] dark:hover:border-white/35"
                           }`}
                         >
                           {pillar.label}{" "}
-                          <span className={isActive ? "text-[#54D6AE]" : "text-[#6B7280]"}>
+                          <span
+                            className={
+                              isActive
+                                ? "text-[#54D6AE] dark:text-[#1D7A5E]"
+                                : "text-[#6B7280] dark:text-[#9CA6B5]"
+                            }
+                          >
                             ({pillar.count})
                           </span>
                         </button>
@@ -534,14 +540,14 @@ export default function VisualArchivePopout({
                 /* In-Popout Work Detail Inspector */
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-                    <div className="rounded-[24px] border border-[#D8D4CB] bg-white p-6 lg:col-span-8">
-                      <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-[#2CA884]">
+                    <div className="rounded-[24px] border border-[#D8D4CB] bg-white p-6 dark:border-white/10 dark:bg-[#161C28] lg:col-span-8">
+                      <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-[#2CA884] dark:text-[#54D6AE]">
                         {selectedWork.pillar} · {selectedWork.aspectNote}
                       </p>
-                      <p className="mt-2 text-base leading-[1.6] text-[#10161C]">
+                      <p className="mt-2 text-base leading-[1.6] text-[#10161C] dark:text-[#F4F6F9]">
                         {selectedWork.summary}
                       </p>
-                      <p className="mt-3 text-xs font-medium text-[#6B7280]">
+                      <p className="mt-3 text-xs font-medium text-[#6B7280] dark:text-[#9CA6B5]">
                         {selectedWork.roleNote}
                       </p>
                       {selectedWork.metrics && (
@@ -549,7 +555,7 @@ export default function VisualArchivePopout({
                           {selectedWork.metrics.map((metric) => (
                             <span
                               key={metric}
-                              className="rounded-full bg-[#2CA884]/12 px-3 py-1.5 font-mono text-xs font-semibold text-[#1D7A5E]"
+                              className="rounded-full bg-[#2CA884]/12 px-3 py-1.5 font-mono text-xs font-semibold text-[#1D7A5E] dark:bg-[#54D6AE]/15 dark:text-[#54D6AE]"
                             >
                               {metric}
                             </span>
@@ -558,24 +564,24 @@ export default function VisualArchivePopout({
                       )}
                     </div>
 
-                    <div className="rounded-[24px] border border-[#D8D4CB] bg-white p-6 lg:col-span-4">
+                    <div className="rounded-[24px] border border-[#D8D4CB] bg-white p-6 dark:border-white/10 dark:bg-[#161C28] lg:col-span-4">
                       <div className="flex items-center justify-between">
-                        <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-[#6B7280]">
+                        <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-[#6B7280] dark:text-[#9CA6B5]">
                           Source Boards ({selectedWork.sourceFiles.length})
                         </span>
-                        <Layers className="h-4 w-4 text-[#2CA884]" aria-hidden="true" />
+                        <Layers className="h-4 w-4 text-[#2CA884] dark:text-[#54D6AE]" aria-hidden="true" />
                       </div>
                       <ul className="mt-3 max-h-40 space-y-2 overflow-y-auto pr-1">
                         {selectedWork.sourceFiles.map((file) => (
                           <li key={file.name}>
                             <a
                               href={file.href}
-                              className="flex items-center justify-between gap-2 rounded-xl border border-[#EAECEF] bg-[#FAF8F5] px-3 py-2 text-xs transition-colors hover:border-[#2CA884] focus-visible:outline-2 focus-visible:outline-[#2CA884] focus-visible:outline-offset-2"
+                              className="flex items-center justify-between gap-2 rounded-xl border border-[#EAECEF] bg-[#FAF8F5] px-3 py-2 text-xs transition-colors hover:border-[#2CA884] focus-visible:outline-2 focus-visible:outline-[#2CA884] focus-visible:outline-offset-2 dark:border-white/10 dark:bg-[#1E2636] dark:hover:border-[#54D6AE]"
                             >
-                              <span className="truncate font-mono font-medium text-[#10161C]">
+                              <span className="truncate font-mono font-medium text-[#10161C] dark:text-[#F4F6F9]">
                                 {file.name}
                               </span>
-                              <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-[#6B7280]" aria-hidden="true" />
+                              <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-[#6B7280] dark:text-[#9CA6B5]" aria-hidden="true" />
                             </a>
                           </li>
                         ))}
@@ -654,13 +660,13 @@ export default function VisualArchivePopout({
                   )}
 
                   {/* Adaptive Stage / Step-Through Flow */}
-                  <div className="rounded-[24px] border border-[#D8D4CB] bg-white p-6">
+                  <div className="rounded-[24px] border border-[#D8D4CB] bg-white p-6 dark:border-white/10 dark:bg-[#161C28]">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
-                        <p className="font-mono text-[11px] uppercase tracking-wider text-[#6B7280]">
+                        <p className="font-mono text-[11px] uppercase tracking-wider text-[#6B7280] dark:text-[#9CA6B5]">
                           Adaptive Stage Viewer · {selectedWork.dimensions} px
                         </p>
-                        <h3 className="mt-0.5 font-heading text-base font-semibold text-[#10161C]">
+                        <h3 className="mt-0.5 font-heading text-base font-semibold text-[#10161C] dark:text-[#F4F6F9]">
                           {selectedWork.flowSteps
                             ? "Step-Through Panoramic Flow"
                             : "High-Resolution Board Stage"}
@@ -670,7 +676,7 @@ export default function VisualArchivePopout({
                       <div
                         role="radiogroup"
                         aria-label="Stage viewer theme"
-                        className="relative inline-flex rounded-full border border-[#D8D4CB] bg-[#FAF8F5] p-1"
+                        className="relative inline-flex rounded-full border border-[#D8D4CB] bg-[#FAF8F5] p-1 dark:border-white/15 dark:bg-[#11161F]"
                       >
                         {(["auto", "light", "dark"] as const).map((mode) => {
                           const isSelected = stageMode === mode;
@@ -683,8 +689,8 @@ export default function VisualArchivePopout({
                               onClick={() => setStageMode(mode)}
                               className={`relative min-h-[32px] cursor-pointer rounded-full px-3 text-xs font-semibold capitalize transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] ${
                                 isSelected
-                                  ? "text-white"
-                                  : "text-[#6B7280] hover:text-[#10161C]"
+                                  ? "text-white dark:text-[#0F131A]"
+                                  : "text-[#6B7280] hover:text-[#10161C] dark:text-[#9CA6B5] dark:hover:text-white"
                               }`}
                             >
                               {isSelected && (
@@ -699,7 +705,7 @@ export default function VisualArchivePopout({
                                           bounce: 0.18,
                                         }
                                   }
-                                  className="absolute inset-0 rounded-full bg-[#0F171E]"
+                                  className="absolute inset-0 rounded-full bg-[#0F171E] dark:bg-[#F4F6F9]"
                                   aria-hidden="true"
                                 />
                               )}
@@ -790,15 +796,15 @@ export default function VisualArchivePopout({
             </div>
 
             {/* Popout Footer */}
-            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#D8D4CB] bg-[#FAF8F5] px-5 py-3.5 sm:px-8">
-              <p className="flex items-center gap-2 text-xs text-[#6B7280]">
-                <Sparkles className="h-3.5 w-3.5 text-[#2CA884]" aria-hidden="true" />
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#D8D4CB] bg-[#FAF8F5] px-5 py-3.5 dark:border-white/10 dark:bg-[#11161F] sm:px-8">
+              <p className="flex items-center gap-2 text-xs text-[#6B7280] dark:text-[#9CA6B5]">
+                <Sparkles className="h-3.5 w-3.5 text-[#2CA884] dark:text-[#54D6AE]" aria-hidden="true" />
                 Selected works archive · 18 high-resolution boards
               </p>
               <div className="flex items-center gap-2">
                 <a
                   href="mailto:rolan.bacalla@gmail.com?subject=Visual%20Archive%20Walkthrough%20Request"
-                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-[#D8D4CB] bg-white px-4 text-xs font-semibold text-[#10161C] hover:border-[#10161C]"
+                  className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-[#D8D4CB] bg-white px-4 text-xs font-semibold text-[#10161C] hover:border-[#10161C] dark:border-white/15 dark:bg-[#19202D] dark:text-[#F4F6F9] dark:hover:border-white/35"
                 >
                   Request Full Walkthrough
                   <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -806,7 +812,7 @@ export default function VisualArchivePopout({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="inline-flex min-h-[40px] cursor-pointer items-center rounded-full bg-[#0F171E] px-4 text-xs font-semibold text-white hover:bg-[#1E293B]"
+                  className="inline-flex min-h-[40px] cursor-pointer items-center rounded-full bg-[#0F171E] px-4 text-xs font-semibold text-white hover:bg-[#1E293B] dark:bg-[#F4F6F9] dark:text-[#0F131A] dark:hover:bg-white"
                 >
                   Close Popout
                 </button>

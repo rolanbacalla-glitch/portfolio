@@ -109,7 +109,7 @@ const LAYERS: readonly LayerConfig[] = [
     expand: false,
     times: TAIL_TIMES,
     ease: TRAIL_EASES,
-    className: "z-10 bg-[#10161C]/18",
+    className: "z-10 bg-[#10161C]/18 dark:bg-[#F4F6F9]/20",
   },
   {
     id: "mid",
@@ -119,7 +119,7 @@ const LAYERS: readonly LayerConfig[] = [
     expand: false,
     times: MID_TIMES,
     ease: TRAIL_EASES,
-    className: "z-20 bg-[#10161C]/32",
+    className: "z-20 bg-[#10161C]/32 dark:bg-[#F4F6F9]/42",
   },
   {
     id: "lead",
@@ -129,7 +129,7 @@ const LAYERS: readonly LayerConfig[] = [
     expand: true,
     times: LEAD_TIMES,
     ease: LEAD_EASES,
-    className: "z-30 bg-[#10161C]",
+    className: "z-30 bg-[#10161C] dark:bg-[#F4F6F9]",
   },
 ];
 

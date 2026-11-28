@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
@@ -14,20 +15,36 @@
   --color-lavender: #c8bfff;
 }
 
+:root {
+  --surface-canvas: #eaecef;
+  --surface-ink: #10161c;
+  --scrollbar-track: #eaecef;
+  --scrollbar-thumb: #c5cbd3;
+  --scrollbar-thumb-hover: #9aa2ae;
+}
+
+.dark {
+  --surface-canvas: #070a0e;
+  --surface-ink: #f4f6f9;
+  --scrollbar-track: #070a0e;
+  --scrollbar-thumb: #273140;
+  --scrollbar-thumb-hover: #3b475c;
+}
+
 @layer base {
   html {
-    background-color: var(--color-canvas);
-    color: var(--color-ink);
+    background-color: var(--surface-canvas);
+    color: var(--surface-ink);
   }
 
   body {
-    background-color: var(--color-canvas);
-    color: var(--color-ink);
+    background-color: var(--surface-canvas);
+    color: var(--surface-ink);
     font-family: var(--font-sans);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    @apply selection:bg-[#2CA884]/20 selection:text-[#10161C];
+    @apply selection:bg-[#2CA884]/20 selection:text-[#10161C] dark:selection:bg-[#54D6AE]/25 dark:selection:text-white;
   }
 
   h1,
@@ -47,14 +64,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #eaecef;
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c5cbd3;
+  background: var(--scrollbar-thumb);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9aa2ae;
+  background: var(--scrollbar-thumb-hover);
 }

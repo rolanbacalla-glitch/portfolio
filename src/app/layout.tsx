@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { DM_Sans, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -42,8 +44,13 @@ export default function RootLayout({
       className={`${dmSans.variable} ${plusJakartaSans.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full bg-[#EAECEF] text-[#10161C] font-sans">
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
+      <body className="min-h-full bg-[#EAECEF] text-[#10161C] transition-colors duration-200 dark:bg-[#070A0E] dark:text-[#F4F6F9] font-sans">
+        <ThemeProvider>
+          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

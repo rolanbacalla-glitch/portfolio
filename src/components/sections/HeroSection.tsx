@@ -19,6 +19,7 @@ import {
   type WorkCategory,
 } from "@/data/portfolio";
 import BrandLogo from "@/components/BrandLogo";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface HeroSectionProps {
   onSelectDiscipline: (category: Exclude<WorkCategory, "All">) => void;
@@ -46,45 +47,45 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
   return (
     <section
       id="top"
-      className="relative overflow-hidden rounded-[28px] bg-[#FAF8F5] px-6 py-7 text-[#10161C] shadow-[0_1px_3px_rgba(16,22,28,0.04)] sm:px-10 sm:py-10 lg:rounded-[36px] lg:px-14 lg:py-12"
+      className="relative overflow-hidden rounded-[28px] bg-[#FAF8F5] px-6 py-7 text-[#10161C] shadow-[0_1px_3px_rgba(16,22,28,0.04)] transition-colors duration-200 dark:border dark:border-white/[0.07] dark:bg-[#11161F] dark:text-[#F4F6F9] dark:shadow-none sm:px-10 sm:py-10 lg:rounded-[36px] lg:px-14 lg:py-12"
     >
       {/* Top Bar inside Sheet 01 */}
-      <header className="mb-10 flex items-center justify-between gap-6 lg:mb-12">
+      <header className="mb-10 flex items-center justify-between gap-4 sm:gap-6 lg:mb-12">
         {/* Brand Mark + Name Lockup */}
         <div className="inline-flex shrink-0 items-center gap-3.5">
           <BrandLogo />
 
           <a
             href="#top"
-            className="group flex flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2CA884]"
+            className="group flex flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2CA884] dark:focus-visible:outline-[#54D6AE]"
             aria-label="Rolan Bacalla — Home"
           >
-            <span className="font-heading text-[20px] font-semibold leading-none tracking-[0.04em] text-[#10161C] whitespace-nowrap">
+            <span className="font-heading text-[20px] font-semibold leading-none tracking-[0.04em] text-[#10161C] transition-colors duration-200 dark:text-[#F4F6F9] whitespace-nowrap">
               ROLAN
             </span>
-            <span className="mt-1 text-[11px] font-medium leading-none tracking-[0.12em] text-[#6B7280] whitespace-nowrap">
+            <span className="mt-1 text-[11px] font-medium leading-none tracking-[0.12em] text-[#6B7280] transition-colors duration-200 dark:text-[#9CA6B5] whitespace-nowrap">
               BACALLA
             </span>
           </a>
         </div>
 
-        {/* Desktop Minimal Nav with × separators + Coffee Break Utility Pill */}
-        <div className="hidden items-center gap-6 md:flex">
+        {/* Desktop Minimal Nav with × separators + Theme Toggle + Coffee Break Utility Pill */}
+        <div className="hidden items-center gap-4 lg:gap-5 md:flex">
           <nav
             aria-label="Primary navigation"
-            className="flex items-center gap-3.5 text-[14px] font-medium text-[#6B7280]"
+            className="flex items-center gap-3.5 text-[14px] font-medium text-[#6B7280] dark:text-[#9CA6B5]"
           >
             {navItems.map((item, idx) => (
               <span key={item.href} className="inline-flex items-center gap-3.5">
                 <a
                   href={item.href}
-                  className="whitespace-nowrap shrink-0 transition-colors duration-200 hover:text-[#10161C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2CA884]"
+                  className="whitespace-nowrap shrink-0 transition-colors duration-200 hover:text-[#10161C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2CA884] dark:hover:text-[#F4F6F9] dark:focus-visible:outline-[#54D6AE]"
                 >
                   {item.label}
                 </a>
                 {idx < navItems.length - 1 && (
                   <span
-                    className="text-[12px] text-[#B8BEC7] select-none"
+                    className="text-[12px] text-[#B8BEC7] select-none dark:text-[#4B5565]"
                     aria-hidden="true"
                   >
                     ×
@@ -94,39 +95,48 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
             ))}
           </nav>
 
-          <a
-            href={COFFEE_BREAK_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Coffee Break — open interactive mini-games in a new tab"
-            className="group inline-flex min-h-[40px] shrink-0 items-center gap-2 rounded-full border border-[#D8D4CB] bg-white px-4 py-2 text-[13px] font-medium text-[#10161C] whitespace-nowrap transition-all duration-200 hover:border-[#10161C] hover:bg-[#0F171E] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884]"
-          >
-            <Coffee
-              className="h-3.5 w-3.5 text-[#1D7A5E] transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-110 group-hover:text-[#54D6AE]"
-              aria-hidden="true"
-            />
-            <span>Coffee Break</span>
-            <ArrowUpRight
-              className="h-3.5 w-3.5 text-[#6B7280] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white/80"
-              aria-hidden="true"
-            />
-          </a>
+          <div className="flex items-center gap-2.5">
+            <ThemeToggle />
+
+            <a
+              href={COFFEE_BREAK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Coffee Break — open interactive mini-games in a new tab"
+              className="group inline-flex min-h-[40px] shrink-0 items-center gap-2 rounded-full border border-[#D8D4CB] bg-white px-4 py-2 text-[13px] font-medium text-[#10161C] whitespace-nowrap transition-all duration-200 hover:border-[#10161C] hover:bg-[#0F171E] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] dark:border-white/15 dark:bg-[#19202D] dark:text-[#F4F6F9] dark:hover:border-[#54D6AE]/60 dark:hover:bg-[#232D3F] dark:hover:text-white dark:focus-visible:outline-[#54D6AE]"
+            >
+              <Coffee
+                className="h-3.5 w-3.5 text-[#1D7A5E] transition-transform duration-200 group-hover:-rotate-6 group-hover:scale-110 group-hover:text-[#54D6AE] dark:text-[#54D6AE]"
+                aria-hidden="true"
+              />
+              <span>Coffee Break</span>
+              <ArrowUpRight
+                className="h-3.5 w-3.5 text-[#6B7280] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white/80 dark:text-[#9CA6B5]"
+                aria-hidden="true"
+              />
+            </a>
+          </div>
         </div>
 
-        {/* Mobile Actions: Compact Coffee Break Pill + Menu Button */}
+        {/* Mobile Actions: Compact Theme Switch + Coffee Break Pill + Menu Button */}
         <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle compact />
+
           <a
             href={COFFEE_BREAK_URL}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Coffee Break — open interactive mini-games in a new window"
-            className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-[#D8D4CB] bg-white px-3.5 text-[12.5px] font-medium text-[#10161C] whitespace-nowrap transition-colors hover:border-[#10161C] hover:bg-[#F2EFEA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884]"
+            className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-[#D8D4CB] bg-white px-3 text-[12.5px] font-medium text-[#10161C] whitespace-nowrap transition-colors hover:border-[#10161C] hover:bg-[#F2EFEA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] dark:border-white/15 dark:bg-[#19202D] dark:text-[#F4F6F9] dark:hover:border-white/30 dark:hover:bg-[#232D3F] dark:focus-visible:outline-[#54D6AE]"
           >
-            <Coffee className="h-3.5 w-3.5 text-[#1D7A5E]" aria-hidden="true" />
-            <span className="hidden min-[390px]:inline">Coffee Break</span>
-            <span className="min-[390px]:hidden">Break</span>
+            <Coffee
+              className="h-3.5 w-3.5 text-[#1D7A5E] dark:text-[#54D6AE]"
+              aria-hidden="true"
+            />
+            <span className="hidden min-[440px]:inline">Coffee Break</span>
+            <span className="min-[440px]:hidden">Break</span>
             <ArrowUpRight
-              className="h-3 w-3 text-[#6B7280]"
+              className="h-3 w-3 text-[#6B7280] dark:text-[#9CA6B5]"
               aria-hidden="true"
             />
           </a>
@@ -138,7 +148,7 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
             aria-label={
               mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
             }
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#E4E1DA] bg-white text-[#10161C] transition-colors hover:bg-[#F2EFEA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884]"
+            className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#E4E1DA] bg-white text-[#10161C] transition-colors hover:bg-[#F2EFEA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] dark:border-white/15 dark:bg-[#19202D] dark:text-[#F4F6F9] dark:hover:bg-[#232D3F] dark:focus-visible:outline-[#54D6AE]"
           >
             {mobileMenuOpen ? (
               <X className="h-5 w-5" />
@@ -158,37 +168,37 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.18 }}
             aria-label="Mobile navigation"
-            className="mb-8 flex flex-col gap-1 rounded-[20px] border border-[#E7E4DD] bg-white p-3 md:hidden"
+            className="mb-8 flex flex-col gap-1 rounded-[20px] border border-[#E7E4DD] bg-white p-3 dark:border-white/10 dark:bg-[#161C28] md:hidden"
           >
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="rounded-xl px-4 py-3 text-[15px] font-medium text-[#10161C] transition-colors hover:bg-[#FAF8F5]"
+                className="rounded-xl px-4 py-3 text-[15px] font-medium text-[#10161C] transition-colors hover:bg-[#FAF8F5] dark:text-[#F4F6F9] dark:hover:bg-white/[0.06]"
               >
                 {item.label}
               </a>
             ))}
 
-            <div className="mt-1 border-t border-[#EAE7E0] pt-2">
+            <div className="mt-1 border-t border-[#EAE7E0] pt-2 dark:border-white/10">
               <a
                 href={COFFEE_BREAK_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileMenuOpen(false)}
                 aria-label="Coffee Break — open interactive mini-games in a new tab"
-                className="flex items-center justify-between rounded-xl bg-[#FAF8F5] px-4 py-3 text-[15px] font-medium text-[#10161C] transition-colors hover:bg-[#F2EFEA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884]"
+                className="flex items-center justify-between rounded-xl bg-[#FAF8F5] px-4 py-3 text-[15px] font-medium text-[#10161C] transition-colors hover:bg-[#F2EFEA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] dark:bg-[#1E2636] dark:text-[#F4F6F9] dark:hover:bg-[#273144] dark:focus-visible:outline-[#54D6AE]"
               >
                 <span className="inline-flex items-center gap-2.5">
                   <Coffee
-                    className="h-4 w-4 text-[#1D7A5E]"
+                    className="h-4 w-4 text-[#1D7A5E] dark:text-[#54D6AE]"
                     aria-hidden="true"
                   />
                   <span>Coffee Break</span>
                 </span>
                 <ArrowUpRight
-                  className="h-4 w-4 text-[#6B7280]"
+                  className="h-4 w-4 text-[#6B7280] dark:text-[#9CA6B5]"
                   aria-hidden="true"
                 />
               </a>
@@ -204,22 +214,24 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
           <div>
             {/* Index Marker + Disciplines */}
             <div className="inline-flex flex-wrap items-center gap-3">
-              <span className="inline-flex h-7 min-w-[38px] items-center justify-center rounded-full bg-[#10161C] px-3 text-[11px] font-semibold tracking-wide text-white tabular-nums">
+              <span className="inline-flex h-7 min-w-[38px] items-center justify-center rounded-full bg-[#10161C] px-3 text-[11px] font-semibold tracking-wide text-white tabular-nums dark:bg-[#F4F6F9] dark:text-[#0F131A]">
                 01
               </span>
-              <span className="text-[13.5px] font-semibold tracking-[-0.01em] text-[#10161C]">
+              <span className="text-[13.5px] font-semibold tracking-[-0.01em] text-[#10161C] dark:text-[#F4F6F9]">
                 UX/UI Designer · Product Thinking · Design Systems
               </span>
             </div>
 
             {/* Primary Display Headline — Preserving Your Hero Message */}
-            <h1 className="mt-6 font-heading text-[2.5rem] font-extrabold leading-[1.03] tracking-[-0.04em] text-[#10161C] sm:text-[3.1rem] xl:text-[3.45rem]">
+            <h1 className="mt-6 font-heading text-[2.5rem] font-extrabold leading-[1.03] tracking-[-0.04em] text-[#10161C] dark:text-[#F4F6F9] sm:text-[3.1rem] xl:text-[3.45rem]">
               Designing digital products that feel clear, useful, and{" "}
-              <span className="text-[#2CA884]">beautifully resolved.</span>
+              <span className="text-[#2CA884] dark:text-[#54D6AE]">
+                beautifully resolved.
+              </span>
             </h1>
 
             {/* Lead Copy */}
-            <p className="mt-5 max-w-[440px] text-[15px] leading-[1.65] text-[#6B7280]">
+            <p className="mt-5 max-w-[440px] text-[15px] leading-[1.65] text-[#6B7280] dark:text-[#9CA6B5]">
               I’m Rolan Bacalla, a London-based UX/UI designer creating product
               experiences across audio, tools, and digital platforms — with a
               strong focus on usability, systems thinking, and polished
@@ -230,7 +242,7 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
                 href="#work"
-                className="group inline-flex items-center gap-2.5 rounded-full bg-[#0F171E] px-6 py-3.5 text-[13.5px] font-medium text-white transition-colors duration-200 hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] whitespace-nowrap shrink-0"
+                className="group inline-flex items-center gap-2.5 rounded-full bg-[#0F171E] px-6 py-3.5 text-[13.5px] font-medium text-white transition-colors duration-200 hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] dark:bg-[#F4F6F9] dark:text-[#0F131A] dark:hover:bg-white dark:focus-visible:outline-[#54D6AE] whitespace-nowrap shrink-0"
               >
                 View Projects
                 <ArrowUpRight
@@ -241,7 +253,7 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
 
               <a
                 href="mailto:rolan.bacalla@gmail.com"
-                className="inline-flex items-center gap-2 rounded-full border border-[#D8D4CB] bg-white px-6 py-3.5 text-[13.5px] font-medium text-[#10161C] transition-colors duration-200 hover:border-[#10161C] hover:bg-[#F3F0EA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-2 rounded-full border border-[#D8D4CB] bg-white px-6 py-3.5 text-[13.5px] font-medium text-[#10161C] transition-colors duration-200 hover:border-[#10161C] hover:bg-[#F3F0EA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] dark:border-white/15 dark:bg-[#19202D] dark:text-[#F4F6F9] dark:hover:border-white/35 dark:hover:bg-[#232D3F] dark:focus-visible:outline-[#54D6AE] whitespace-nowrap shrink-0"
               >
                 Get in Touch
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -257,7 +269,7 @@ export default function HeroSection({ onSelectDiscipline }: HeroSectionProps) {
               key={card.id}
               type="button"
               onClick={() => onSelectDiscipline(card.filterTarget)}
-              className="group relative flex min-h-[380px] flex-col justify-between overflow-hidden rounded-[24px] bg-[#10161C] p-5 text-left transition-transform duration-300 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] sm:min-h-[460px] lg:min-h-[520px] lg:rounded-[28px] lg:p-6 cursor-pointer"
+              className="group relative flex min-h-[380px] flex-col justify-between overflow-hidden rounded-[24px] bg-[#10161C] p-5 text-left transition-transform duration-300 hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] dark:ring-1 dark:ring-white/[0.08] dark:focus-visible:outline-[#54D6AE] sm:min-h-[460px] lg:min-h-[520px] lg:rounded-[28px] lg:p-6 cursor-pointer"
             >
               {/* Full-bleed Background Visual */}
               <Image

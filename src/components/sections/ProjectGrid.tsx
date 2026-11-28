@@ -136,25 +136,27 @@ export default function ProjectGrid() {
     <section
       ref={sectionRef}
       id="work"
-      className="relative overflow-hidden rounded-[28px] bg-[#FAF8F5] px-6 py-10 text-[#10161C] shadow-[0_1px_3px_rgba(16,22,28,0.04)] sm:px-10 sm:py-12 lg:rounded-[36px] lg:px-14 lg:py-14"
+      className="relative overflow-hidden rounded-[28px] bg-[#FAF8F5] px-6 py-10 text-[#10161C] shadow-[0_1px_3px_rgba(16,22,28,0.04)] transition-colors duration-200 dark:border dark:border-white/[0.07] dark:bg-[#11161F] dark:text-[#F4F6F9] dark:shadow-none sm:px-10 sm:py-12 lg:rounded-[36px] lg:px-14 lg:py-14"
     >
       {/* Header Row */}
       <div className="mb-10 max-w-2xl lg:mb-12">
         <div className="inline-flex items-center gap-3">
-          <span className="inline-flex h-7 min-w-[38px] items-center justify-center rounded-full bg-[#10161C] px-3 text-[11px] font-semibold tracking-wide text-white tabular-nums">
+          <span className="inline-flex h-7 min-w-[38px] items-center justify-center rounded-full bg-[#10161C] px-3 text-[11px] font-semibold tracking-wide text-white tabular-nums dark:bg-[#F4F6F9] dark:text-[#0F131A]">
             03
           </span>
-          <span className="text-[14px] font-semibold tracking-[-0.01em] text-[#10161C]">
+          <span className="text-[14px] font-semibold tracking-[-0.01em] text-[#10161C] dark:text-[#F4F6F9]">
             Selected Case Studies
           </span>
         </div>
 
-        <h2 className="mt-6 font-heading text-[2.5rem] font-extrabold leading-[1.02] tracking-[-0.035em] text-[#10161C] sm:text-[3.25rem]">
+        <h2 className="mt-6 font-heading text-[2.5rem] font-extrabold leading-[1.02] tracking-[-0.035em] text-[#10161C] dark:text-[#F4F6F9] sm:text-[3.25rem]">
           Case studies grounded in{" "}
-          <span className="text-[#2CA884]">real product challenges.</span>
+          <span className="text-[#2CA884] dark:text-[#54D6AE]">
+            real product challenges.
+          </span>
         </h2>
 
-        <p className="mt-4 max-w-xl text-[15px] leading-[1.6] text-[#6B7280]">
+        <p className="mt-4 max-w-xl text-[15px] leading-[1.6] text-[#6B7280] dark:text-[#9CA6B5]">
           A selection of product design work spanning connected audio, companion
           apps, UX research, and design systems — each focused on clear
           usability and thoughtful execution.
@@ -194,7 +196,7 @@ export default function ProjectGrid() {
                     : 0,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="group relative flex min-h-[450px] flex-col justify-between overflow-hidden rounded-[26px] bg-[#0B0F14] p-6 text-left transition-transform duration-300 hover:-translate-y-1 lg:min-h-[500px] lg:rounded-[28px] lg:p-7"
+              className="group relative flex min-h-[450px] flex-col justify-between overflow-hidden rounded-[26px] bg-[#0B0F14] p-6 text-left transition-transform duration-300 hover:-translate-y-1 dark:ring-1 dark:ring-white/[0.08] lg:min-h-[500px] lg:rounded-[28px] lg:p-7"
             >
               {/* Full-Bleed Editorial Studio Photography */}
               <Image
@@ -282,24 +284,24 @@ export default function ProjectGrid() {
             onClick={handleToggleShowAll}
             aria-expanded={showAll}
             aria-controls="portfolio-project-grid"
-            className="group inline-flex min-h-[46px] shrink-0 cursor-pointer items-center gap-2 rounded-full bg-[#0F171E] px-6 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] whitespace-nowrap"
+            className="group inline-flex min-h-[46px] shrink-0 cursor-pointer items-center gap-2 rounded-full bg-[#0F171E] px-6 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] dark:bg-[#F4F6F9] dark:text-[#0F131A] dark:hover:bg-white dark:focus-visible:outline-[#54D6AE] whitespace-nowrap"
           >
             {showAll ? (
               <>
                 <span>Show less</span>
                 <ChevronUp
-                  className="h-4 w-4 text-[#54D6AE] transition-transform duration-200 group-hover:-translate-y-0.5"
+                  className="h-4 w-4 text-[#54D6AE] transition-transform duration-200 group-hover:-translate-y-0.5 dark:text-[#1D7A5E]"
                   aria-hidden="true"
                 />
               </>
             ) : (
               <>
                 <span>Show more</span>
-                <span className="font-mono text-[12px] font-medium text-[#54D6AE] tabular-nums">
+                <span className="font-mono text-[12px] font-medium text-[#54D6AE] tabular-nums dark:text-[#1D7A5E]">
                   (+{hiddenCount})
                 </span>
                 <ChevronDown
-                  className="h-4 w-4 text-[#54D6AE] transition-transform duration-200 group-hover:translate-y-0.5"
+                  className="h-4 w-4 text-[#54D6AE] transition-transform duration-200 group-hover:translate-y-0.5 dark:text-[#1D7A5E]"
                   aria-hidden="true"
                 />
               </>
@@ -328,7 +330,7 @@ export default function ProjectGrid() {
               exit={{ opacity: 0, y: 12, scale: 0.98 }}
               transition={{ duration: 0.22 }}
               onClick={(event) => event.stopPropagation()}
-              className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[28px] bg-[#FAF8F5] text-[#10161C] shadow-2xl"
+              className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-[28px] bg-[#FAF8F5] text-[#10161C] shadow-2xl dark:border dark:border-white/10 dark:bg-[#141A24] dark:text-[#F4F6F9]"
             >
               {/* Top Media Header */}
               <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#10161C]">
@@ -371,7 +373,7 @@ export default function ProjectGrid() {
                     {selectedProject.metrics.map((metric) => (
                       <span
                         key={metric}
-                        className="rounded-full bg-[#2CA884]/12 px-3 py-1.5 font-mono text-xs font-semibold text-[#1D7A5E] tabular-nums"
+                        className="rounded-full bg-[#2CA884]/12 px-3 py-1.5 font-mono text-xs font-semibold text-[#1D7A5E] tabular-nums dark:bg-[#54D6AE]/15 dark:text-[#54D6AE]"
                       >
                         {metric}
                       </span>
@@ -381,35 +383,35 @@ export default function ProjectGrid() {
 
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                   <div>
-                    <h4 className="text-[12.5px] font-semibold text-[#6B7280]">
+                    <h4 className="text-[12.5px] font-semibold text-[#6B7280] dark:text-[#9CA6B5]">
                       The Challenge
                     </h4>
-                    <p className="mt-2 text-[14.5px] leading-[1.6] text-[#10161C]">
+                    <p className="mt-2 text-[14.5px] leading-[1.6] text-[#10161C] dark:text-[#E5EAF2]">
                       {selectedProject.problem}
                     </p>
                   </div>
                   <div>
-                    <h4 className="text-[12.5px] font-semibold text-[#6B7280]">
+                    <h4 className="text-[12.5px] font-semibold text-[#6B7280] dark:text-[#9CA6B5]">
                       Role &amp; Outcome
                     </h4>
-                    <p className="mt-2 text-[14.5px] leading-[1.6] text-[#10161C]">
+                    <p className="mt-2 text-[14.5px] leading-[1.6] text-[#10161C] dark:text-[#E5EAF2]">
                       {selectedProject.role}
                     </p>
-                    <p className="mt-2 text-[14px] font-medium leading-[1.55] text-[#1D7A5E]">
+                    <p className="mt-2 text-[14px] font-medium leading-[1.55] text-[#1D7A5E] dark:text-[#54D6AE]">
                       {selectedProject.outcome}
                     </p>
                   </div>
                 </div>
 
-                <div className="border-t border-[#E7E4DD] pt-6">
-                  <h4 className="text-[12.5px] font-semibold text-[#6B7280]">
+                <div className="border-t border-[#E7E4DD] pt-6 dark:border-white/10">
+                  <h4 className="text-[12.5px] font-semibold text-[#6B7280] dark:text-[#9CA6B5]">
                     Key Contributions
                   </h4>
-                  <ul className="mt-3 space-y-2.5 text-[14.5px] leading-[1.6] text-[#374151]">
+                  <ul className="mt-3 space-y-2.5 text-[14.5px] leading-[1.6] text-[#374151] dark:text-[#CBD4E1]">
                     {selectedProject.highlights.map((point) => (
                       <li key={point} className="flex items-start gap-2.5">
                         <span
-                          className="mt-1 font-semibold text-[#2CA884]"
+                          className="mt-1 font-semibold text-[#2CA884] dark:text-[#54D6AE]"
                           aria-hidden="true"
                         >
                           —
@@ -421,13 +423,13 @@ export default function ProjectGrid() {
                 </div>
 
                 {/* Modal Footer Actions */}
-                <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#E7E4DD] pt-6">
+                <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#E7E4DD] pt-6 dark:border-white/10">
                   {selectedProject.liveUrl ? (
                     <a
                       href={selectedProject.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2.5 rounded-full bg-[#0F171E] px-6 py-3 text-[13.5px] font-medium text-white transition-colors hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] whitespace-nowrap"
+                      className="inline-flex items-center gap-2.5 rounded-full bg-[#0F171E] px-6 py-3 text-[13.5px] font-medium text-white transition-colors hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] dark:bg-[#F4F6F9] dark:text-[#0F131A] dark:hover:bg-white dark:focus-visible:outline-[#54D6AE] whitespace-nowrap"
                     >
                       {selectedProject.liveLabel ?? "Open live project"}
                       <ArrowUpRight className="h-4 w-4" />
@@ -435,7 +437,7 @@ export default function ProjectGrid() {
                   ) : (
                     <a
                       href="mailto:rolan.bacalla@gmail.com?subject=Case%20Study%20Walkthrough%20Request"
-                      className="inline-flex items-center gap-2.5 rounded-full bg-[#0F171E] px-6 py-3 text-[13.5px] font-medium text-white transition-colors hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] whitespace-nowrap"
+                      className="inline-flex items-center gap-2.5 rounded-full bg-[#0F171E] px-6 py-3 text-[13.5px] font-medium text-white transition-colors hover:bg-[#1E293B] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2CA884] dark:bg-[#F4F6F9] dark:text-[#0F131A] dark:hover:bg-white dark:focus-visible:outline-[#54D6AE] whitespace-nowrap"
                     >
                       Request full walkthrough
                       <ArrowRight className="h-4 w-4" />
@@ -445,7 +447,7 @@ export default function ProjectGrid() {
                   <button
                     type="button"
                     onClick={() => setSelectedProject(null)}
-                    className="rounded-full border border-[#DCD8CE] px-5 py-2.5 text-[13.5px] font-medium text-[#10161C] transition-colors hover:bg-[#EFECE5] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10161C] whitespace-nowrap cursor-pointer"
+                    className="rounded-full border border-[#DCD8CE] px-5 py-2.5 text-[13.5px] font-medium text-[#10161C] transition-colors hover:bg-[#EFECE5] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#10161C] dark:border-white/15 dark:text-[#F4F6F9] dark:hover:bg-white/10 dark:focus-visible:outline-[#54D6AE] whitespace-nowrap cursor-pointer"
                   >
                     Close overview
                   </button>
