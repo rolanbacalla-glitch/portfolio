@@ -375,22 +375,26 @@ export const caseStudies: CaseStudy[] = [
   {
     id: "coffee-break-hub",
     title: "Coffee Break",
-    domain: "Interactive Web · Daily Rituals",
+    domain: "Interactive Web · Game Systems",
     year: "2026",
     category: "Digital Experiences",
     icon: "coffee",
     summary:
-      "A calm collection of 3-minute daily browser puzzles — Loom & Latch, Connect 4, and Chroma Calm — crafted for restorative focus breaks.",
+      "An evolving collection of restorative browser rituals — spanning calm solo puzzles and tactile 1–2 player tabletop classics — unified on one modular design system for mindful focus breaks.",
     problem:
-      "Short workday breaks often get lost to endless social scrolling or high-stress mobile games that tax executive attention rather than restoring it.",
-    role: "End-to-end game UX, Antigravity v3.0 token architecture, spring motion, and procedural Web Audio.",
+      "Short workday breaks easily get lost to endless scrolling or noisy games built to trap attention, while standalone web mini-games rarely share visual cohesion, accessibility, or a clean stopping point.",
+    role: "Ongoing product design, modular game-system architecture, interaction craft, accessibility, and procedural Web Audio.",
     outcome:
-      "Delivered three deterministic daily-seeded games with zero accounts, procedural tactile soundscapes, and a clean one-round stopping point.",
-    metrics: ["3 Live Games", "Web Audio Synth", "Zero-Backend Daily Seed"],
+      "Created an extensible, zero-account browser arcade governed by a calm one-round contract — supporting deterministic daily puzzles, Zen play, and local 2-player matches under one tactile language.",
+    metrics: [
+      "Living Game Suite",
+      "Solo & 2-Player Modes",
+      "Zero-Account · Private",
+    ],
     highlights: [
-      "Engineered magnetic tile-latching (Loom & Latch), tactile strategic disc-dropping (Connect 4), and OKLCH colour harmony (Chroma Calm).",
-      "Synthesised ceramic clicks, weighted wooden disc drops, and pentatonic chimes purely via the Web Audio API.",
-      "Built dual Alabaster Light and Obsidian Dark themes with full keyboard and mobile touch support.",
+      "Architected a reusable game-shell system that smoothly scales from solo spatial and colour puzzles to 8×8 tabletop classics such as Draughts and Chess as the library grows.",
+      "Designed colour-independent tactile pieces using engraved symbols, grooved surfaces, and crisp contrast—paired with procedural Web Audio soundscapes and spring motion.",
+      "Unified Daily Seeded, Zen, and local 2-Player play with full Light and Dark theme parity, keyboard accessibility, and privacy-by-default local persistence.",
     ],
     image: caseCoffeeBreakHubImg,
     imageAlt: "Matte ceramic V60 pour-over dripper beside interlocking ceramic puzzle tiles on warm pale oak",
